@@ -15,27 +15,29 @@ import androidx.lifecycle.ViewModelProviders
 import com.ahgitdevelopment.goosesquizzes.R
 import com.ahgitdevelopment.goosesquizzes.di.component.DaggerActivityComponent
 import com.ahgitdevelopment.goosesquizzes.models.login.LoggedInUserView
-import com.ahgitdevelopment.goosesquizzes.viewmodel.LoginViewModel
+import com.ahgitdevelopment.goosesquizzes.viewmodel.LoginFirebaseViewModel
 import com.ahgitdevelopment.goosesquizzes.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity(), LoginContract.View {
+
     @Inject
     lateinit var presenter: LoginContract.Presenter
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    @Inject
-    lateinit var loginViewModel: LoginViewModel
+    private lateinit var loginViewModel: LoginFirebaseViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        injectDepencencies()
 
-        loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
+        val activityComponent = DaggerActivityComponent.create()
+        activityComponent.inject(this)
+
+        loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginFirebaseViewModel::class.java)
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
@@ -64,75 +66,64 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
             setResult(Activity.RESULT_OK)
 
             //Complete and destroy login activity once successful
-            finish()
+//            finish() //FIXME: Descomentar
         })
 
         username.afterTextChanged {
-            loginViewModel.loginDataChanged(
-                username.text.toString(),
-                password.text.toString()
-            )
+            //            loginViewModel.loginDataChanged(username.text.toString(), password.text.toString())
+            tryLoginDataChange(username.text.toString(), password.text.toString())
         }
 
         password.apply {
             afterTextChanged {
-                loginViewModel.loginDataChanged(
-                    username.text.toString(),
-                    password.text.toString()
-                )
+                //                loginViewModel.loginDataChanged(username.text.toString(), password.text.toString())
+                tryLoginDataChange(username.text.toString(), password.text.toString())
             }
 
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
-                        loginViewModel.login(
-                            username.text.toString(),
-                            password.text.toString()
-                        )
+//                        loginViewModel.login(username.text.toString(), password.text.toString())
+                        tryLogin(username.text.toString(), password.text.toString())
                 }
                 false
             }
 
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString())
+//                loginViewModel.login(username.text.toString(), password.text.toString())
+                tryLogin(username.text.toString(), password.text.toString())
             }
         }
     }
 
-    private fun injectDepencencies() {
-        val loginComponent = DaggerActivityComponent.create()
-        loginComponent.inject(this)
+    private fun tryLogin(username: String, password: String) {
+        loginViewModel.login(username, password)
+    }
+
+    private fun tryLoginDataChange(username: String, password: String) {
+        loginViewModel.loginDataChanged(username, password)
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
+        Toast.makeText(applicationContext, "$welcome $displayName", Toast.LENGTH_LONG).show()
         // TODO : initiate successful logged in experience
-        Toast.makeText(
-            applicationContext,
-            "$welcome $displayName",
-            Toast.LENGTH_LONG
-        ).show()
+        launchLoginSuccess()
+    }
+
+    private fun launchLoginSuccess() {
+//        startActivity(Intent(this, ListEventsActivity::class.java))
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
-        Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext, errorString, Toast.LENGTH_LONG).show()
     }
 
 
-    override fun showProgress(show: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun showErrorMessage(error: String) {
-//        Toast.makeText(applicationContext, error, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun launchLoginSuccess() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 }
+
 
 /**
  * Extension function to simplify setting an afterTextChanged action to EditText components.

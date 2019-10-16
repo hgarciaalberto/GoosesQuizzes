@@ -6,12 +6,17 @@ import com.ahgitdevelopment.goosesquizzes.di.component.DaggerApplicationComponen
 
 class BaseApplication : Application() {
 
-    lateinit var component: ApplicationComponent
+    private lateinit var component: ApplicationComponent
 
     override fun onCreate() {
         super.onCreate()
 
         component = DaggerApplicationComponent.create()
         component.inject(this)
+    }
+
+    // Donde se usa, por qué hace falta?
+    fun getApplicationComponent(): ApplicationComponent {
+        return component
     }
 }

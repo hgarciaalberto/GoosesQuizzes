@@ -6,7 +6,12 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ActivityModule {
+class ActivityModule/*(private val activity : Activity)*/ {
+
+//    @Provides
+//    fun getContext(): Activity{
+//        return activity
+//    }
 
     @Provides
     fun getLoginPresenter(): LoginContract.Presenter {

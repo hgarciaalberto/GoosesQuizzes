@@ -1,7 +1,9 @@
 package com.ahgitdevelopment.goosesquizzes.di.module
 
-import com.ahgitdevelopment.goosesquizzes.models.login.LoginDataSource
-import com.ahgitdevelopment.goosesquizzes.models.login.LoginRepository
+import com.ahgitdevelopment.goosesquizzes.firebase.auth.FirebaseAuthRespository
+import com.ahgitdevelopment.goosesquizzes.ui.login.LoginDataSource
+import com.ahgitdevelopment.goosesquizzes.ui.login.LoginRepository
+import com.ahgitdevelopment.goosesquizzes.viewmodel.LoginFirebaseViewModel
 import com.ahgitdevelopment.goosesquizzes.viewmodel.LoginViewModel
 import com.ahgitdevelopment.goosesquizzes.viewmodel.ViewModelFactory
 import dagger.Module
@@ -12,12 +14,12 @@ import javax.inject.Provider
 class ViewModelModule {
     @Provides
     fun viewModelFactory(
-        loginViewModelProvider: Provider<LoginViewModel>
-        // and so on
+        loginViewModelProvider: Provider<LoginViewModel>,
+        loginFirebaseViewModelProvider: Provider<LoginFirebaseViewModel>
     ): ViewModelFactory {
         return ViewModelFactory(
-            loginViewModelProvider
-            // and so on
+            loginViewModelProvider,
+            loginFirebaseViewModelProvider
         )
     }
 
@@ -27,14 +29,8 @@ class ViewModelModule {
     }
 
     @Provides
-    fun getLoginRepositor(): LoginRepository {
-        return LoginRepository(dataSource = LoginDataSource())
+    fun getloginFirebaseViewModel(): LoginFirebaseViewModel {
+        return LoginFirebaseViewModel(firebaseAuthRepository = FirebaseAuthRespository())
     }
-
-    @Provides
-    fun getLoginDataSource(): LoginDataSource {
-        return LoginDataSource()
-    }
-
 
 }

@@ -1,5 +1,6 @@
-package com.ahgitdevelopment.goosesquizzes.models.login
+package com.ahgitdevelopment.goosesquizzes.ui.login
 
+import com.ahgitdevelopment.goosesquizzes.models.login.LoggedInUser
 import com.ahgitdevelopment.goosesquizzes.util.Result
 
 /**
