@@ -1,20 +1,21 @@
 package com.ahgitdevelopment.goosesquizzes.ui.login
 
-import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.ahgitdevelopment.goosesquizzes.R
 import com.ahgitdevelopment.goosesquizzes.di.component.DaggerActivityComponent
 import com.ahgitdevelopment.goosesquizzes.models.login.LoggedInUserView
+import com.ahgitdevelopment.goosesquizzes.ui.listevent.ListEventsActivity
 import com.ahgitdevelopment.goosesquizzes.viewmodel.LoginFirebaseViewModel
 import com.ahgitdevelopment.goosesquizzes.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_login.*
@@ -23,12 +24,12 @@ import javax.inject.Inject
 class LoginActivity : AppCompatActivity(), LoginContract.View {
 
     @Inject
-    lateinit var presenter: LoginContract.Presenter
-
-    @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    private lateinit var loginViewModel: LoginFirebaseViewModel
+    lateinit var loginViewModel: LoginFirebaseViewModel
+
+    @Inject
+    lateinit var presenter: LoginPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,64 +38,41 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         val activityComponent = DaggerActivityComponent.create()
         activityComponent.inject(this)
 
+        presenter.attach(this)
+
         loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginFirebaseViewModel::class.java)
 
-        loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
-            val loginState = it ?: return@Observer
+        presenter.manageLoginFormState(loginViewModel, this)
 
-            // disable login button unless both username / password is valid
-            login.isEnabled = loginState.isDataValid
+        presenter.manageLoginResult(loginViewModel, this)
 
-            if (loginState.usernameError != null) {
-                username.error = getString(loginState.usernameError)
-            }
-            if (loginState.passwordError != null) {
-                password.error = getString(loginState.passwordError)
-            }
-        })
-
-        loginViewModel.loginResult.observe(this@LoginActivity, Observer {
-            val loginResult = it ?: return@Observer
-
-            loading.visibility = View.GONE
-            if (loginResult.error != null) {
-                showLoginFailed(loginResult.error)
-            }
-            if (loginResult.success != null) {
-                updateUiWithUser(loginResult.success)
-            }
-            setResult(Activity.RESULT_OK)
-
-            //Complete and destroy login activity once successful
-//            finish() //FIXME: Descomentar
-        })
 
         username.afterTextChanged {
-            //            loginViewModel.loginDataChanged(username.text.toString(), password.text.toString())
             tryLoginDataChange(username.text.toString(), password.text.toString())
         }
 
         password.apply {
             afterTextChanged {
-                //                loginViewModel.loginDataChanged(username.text.toString(), password.text.toString())
                 tryLoginDataChange(username.text.toString(), password.text.toString())
             }
 
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
-//                        loginViewModel.login(username.text.toString(), password.text.toString())
                         tryLogin(username.text.toString(), password.text.toString())
                 }
                 false
             }
 
-            login.setOnClickListener {
-                loading.visibility = View.VISIBLE
-//                loginViewModel.login(username.text.toString(), password.text.toString())
-                tryLogin(username.text.toString(), password.text.toString())
-            }
+            login.setOnClickListener(OnClickListener {
+                presenter.loginClick()
+            })
         }
+    }
+
+    override fun loginClick() {
+        loading.visibility = View.VISIBLE
+        tryLogin(username.text.toString(), password.text.toString())
     }
 
     private fun tryLogin(username: String, password: String) {
@@ -105,22 +83,36 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         loginViewModel.loginDataChanged(username, password)
     }
 
-    private fun updateUiWithUser(model: LoggedInUserView) {
+
+    override fun enableButton(enabled: Boolean) {
+        login.isEnabled = enabled
+    }
+
+    override fun setUsernameError(error: Int) {
+        username.error = getString(error)
+    }
+
+    override fun setPasswordError(error: Int) {
+        password.error = getString(error)
+    }
+
+    override fun showLoading(visibility: Int) {
+        loading.visibility = visibility
+    }
+
+    override fun showLoginFailed(@StringRes error: Int) {
+        Toast.makeText(applicationContext, getString(error), Toast.LENGTH_LONG).show()
+    }
+
+    override fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
         Toast.makeText(applicationContext, "$welcome $displayName", Toast.LENGTH_LONG).show()
-        // TODO : initiate successful logged in experience
-        launchLoginSuccess()
     }
 
-    private fun launchLoginSuccess() {
-//        startActivity(Intent(this, ListEventsActivity::class.java))
+    override fun launchLoginSuccess() {
+        startActivity(Intent(this, ListEventsActivity::class.java))
     }
-
-    private fun showLoginFailed(@StringRes errorString: Int) {
-        Toast.makeText(applicationContext, errorString, Toast.LENGTH_LONG).show()
-    }
-
 
 }
 

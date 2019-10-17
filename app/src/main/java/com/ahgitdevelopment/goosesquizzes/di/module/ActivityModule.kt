@@ -1,6 +1,5 @@
 package com.ahgitdevelopment.goosesquizzes.di.module
 
-import com.ahgitdevelopment.goosesquizzes.ui.login.LoginContract
 import com.ahgitdevelopment.goosesquizzes.ui.login.LoginPresenter
 import dagger.Module
 import dagger.Provides
@@ -14,7 +13,7 @@ class ActivityModule/*(private val activity : Activity)*/ {
 //    }
 
     @Provides
-    fun getLoginPresenter(): LoginContract.Presenter {
+    fun getLoginPresenter(): LoginPresenter {
         return LoginPresenter()
     }
 }

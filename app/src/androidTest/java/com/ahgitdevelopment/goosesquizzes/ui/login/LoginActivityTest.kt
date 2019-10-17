@@ -26,7 +26,6 @@ class LoginActivityTest {
     @get:Rule
     var activityRule: ActivityTestRule<LoginActivity> = ActivityTestRule(LoginActivity::class.java)
 
-
     @Before
     fun setUp() {
 
@@ -41,15 +40,7 @@ class LoginActivityTest {
         onView(withId(id.username)).perform(replaceText(USER))
         onView(withId(id.password)).perform(replaceText(PASS))
 
-        onView(withId(id.username))
-            .check(
-                matches(
-                    hasErrorText(
-                        activityRule.activity.getString(string.invalid_username)
-                    )
-                )
-            )
-
+        onView(withId(id.username)).check(matches(hasErrorText(activityRule.activity.getString(string.invalid_username))))
     }
 
     @Test
@@ -61,15 +52,7 @@ class LoginActivityTest {
         onView(withId(id.username)).perform(replaceText(USER))
         onView(withId(id.password)).perform(replaceText(PASS))
 
-        onView(withId(id.username))
-            .check(
-                matches(
-                    hasErrorText(
-                        activityRule.activity.getString(string.invalid_username)
-                    )
-                )
-            )
-
+        onView(withId(id.username)).check(matches(hasErrorText(activityRule.activity.getString(string.invalid_username))))
     }
 
     @Test
@@ -81,16 +64,8 @@ class LoginActivityTest {
         onView(withId(id.username)).perform(replaceText(USER))
         onView(withId(id.password)).perform(replaceText(PASS))
 
-        onView(withId(id.password))
-            .check(
-                matches(
-                    hasErrorText(
-                        activityRule.activity.getString(string.invalid_password)
-                    )
-                )
-            )
+        onView(withId(id.password)).check(matches(hasErrorText(activityRule.activity.getString(string.invalid_password))))
     }
-
 
     @Test
     fun loginActivity_LoginFail_Test() {
@@ -105,7 +80,6 @@ class LoginActivityTest {
         onView(withText(string.login_failed)).inRoot(withDecorView(not(`is`(activityRule.activity.window.decorView))))
             .check(matches(isDisplayed()))
     }
-
 
     @Test
     fun loginActivity_LoginPass_Test() {
