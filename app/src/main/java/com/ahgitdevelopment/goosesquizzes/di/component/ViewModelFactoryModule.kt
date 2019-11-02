@@ -1,4 +1,4 @@
-package com.ahgitdevelopment.goosesquizzes.di.module
+package com.ahgitdevelopment.goosesquizzes.di.component
 
 import com.ahgitdevelopment.goosesquizzes.firebase.auth.FirebaseAuthRespository
 import com.ahgitdevelopment.goosesquizzes.ui.login.LoginDataSource
@@ -11,7 +11,7 @@ import dagger.Provides
 import javax.inject.Provider
 
 @Module
-class ViewModelModule {
+class ViewModelFactoryModule {
     @Provides
     fun viewModelFactory(
         loginViewModelProvider: Provider<LoginViewModel>,
@@ -32,5 +32,4 @@ class ViewModelModule {
     fun getloginFirebaseViewModel(): LoginFirebaseViewModel {
         return LoginFirebaseViewModel(firebaseAuthRepository = FirebaseAuthRespository())
     }
-
 }

@@ -13,14 +13,12 @@ class LoginContract {
         fun loginClick()
 
         // Manage login form state
-        fun enableButton(dataValid: Boolean)
-
+        fun enableButton(enable: Boolean)
         fun setUsernameError(error: Int)
         fun setPasswordError(error: Int)
 
         // Manage login resutl
         fun showLoading(visibility: Int)
-
         fun showLoginFailed(error: Int)
         fun updateUiWithUser(model: LoggedInUserView)
         fun launchLoginSuccess()

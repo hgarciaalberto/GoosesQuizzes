@@ -2,13 +2,14 @@ package com.ahgitdevelopment.goosesquizzes.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import javax.inject.Inject
 import javax.inject.Provider
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
  * Required given LoginViewModel has a non-empty constructor
  */
-class ViewModelFactory(
+class ViewModelFactory @Inject constructor(
     loginViewModelProvider: Provider<LoginViewModel>,
     loginFirebaseViewModelProvider: Provider<LoginFirebaseViewModel>
 ) : ViewModelProvider.Factory {

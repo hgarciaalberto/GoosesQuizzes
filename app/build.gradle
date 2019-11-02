@@ -10,6 +10,7 @@ android {
         applicationId "com.ahgitdevelopment.goosesquizzes"
         minSdkVersion project.minSdkVersion
         targetSdkVersion project.targetSdkVersion
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -20,17 +21,31 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
     // Android
+    implementation "androidx.multidex:multidex:$multidex_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:$androidxVersion"
     implementation "androidx.core:core-ktx:$androidxVersion"
     implementation "androidx.annotation:annotation:$androidxVersion"
     implementation "androidx.appcompat:appcompat:$androidxVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:$androidxLifecycleVersion"
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "androidx.navigation:navigation-fragment:$androidxNavigationVersion"
+    implementation "androidx.navigation:navigation-ui:$androidxNavigationVersion"
+    implementation "androidx.navigation:navigation-fragment-ktx:$androidxNavigationVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$androidxNavigationVersion"
     implementation 'com.google.android.material:material:1.0.0'
 
     // Test
@@ -42,10 +57,6 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
 
-    // Firebase
-    implementation "com.google.firebase:firebase-analytics:$firebaseAnalyticsVersion"
-    implementation "com.google.firebase:firebase-auth:$firebaseAuthVersion"
-
     // Dagger
     api "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
@@ -54,4 +65,11 @@ dependencies {
     api "com.google.dagger:dagger-android-support:$daggerVersion"
     // if you use the support libraries
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+
+    // Firebase
+    implementation "com.google.firebase:firebase-analytics:$firebaseAnalyticsVersion"
+    implementation "com.google.firebase:firebase-auth:$firebaseAuthVersion"
+//    implementation "com.google.firebase:firebase-firestore:$firebaseFirestoreVersion"
+    implementation "com.firebaseui:firebase-ui-firestore:$firebaseFirestoreUiVersion"
+
 }

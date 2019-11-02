@@ -10,8 +10,9 @@ import com.ahgitdevelopment.goosesquizzes.models.login.LoginFormState
 import com.ahgitdevelopment.goosesquizzes.models.login.LoginResult
 import com.ahgitdevelopment.goosesquizzes.ui.login.LoginRepository
 import com.ahgitdevelopment.goosesquizzes.util.Result
+import javax.inject.Inject
 
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm

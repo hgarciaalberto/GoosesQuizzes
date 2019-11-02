@@ -4,10 +4,11 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserInfo
+import javax.inject.Inject
 
 val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-class FirebaseAuthRespository : FirebaseAuthRepositoryContract {
+class FirebaseAuthRespository @Inject constructor() : FirebaseAuthRepositoryContract {
 
     override fun getCurrentUser(): UserInfo? {
         return auth.currentUser

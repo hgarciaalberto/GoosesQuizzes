@@ -3,8 +3,9 @@ package com.ahgitdevelopment.goosesquizzes.ui.login
 import android.view.View
 import androidx.lifecycle.Observer
 import com.ahgitdevelopment.goosesquizzes.viewmodel.LoginFirebaseViewModel
+import javax.inject.Inject
 
-class LoginPresenter : LoginContract.Presenter {
+class LoginPresenter @Inject constructor() : LoginContract.Presenter {
 
     private lateinit var view: LoginContract.View
 
@@ -33,15 +34,14 @@ class LoginPresenter : LoginContract.Presenter {
             val loginResult = it ?: return@Observer
 
             view.showLoading(View.GONE)
+
             if (loginResult.error != null) {
                 view.showLoginFailed(loginResult.error)
             }
             if (loginResult.success != null) {
                 view.updateUiWithUser(loginResult.success)
+                view.launchLoginSuccess()
             }
-
-            //Complete and destroy login activity once successful
-            view.launchLoginSuccess()
         })
     }
 

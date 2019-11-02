@@ -5,23 +5,21 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.ahgitdevelopment.goosesquizzes.R
-import com.ahgitdevelopment.goosesquizzes.di.component.DaggerActivityComponent
+import com.ahgitdevelopment.goosesquizzes.di.common.BaseActivity
 import com.ahgitdevelopment.goosesquizzes.models.login.LoggedInUserView
-import com.ahgitdevelopment.goosesquizzes.ui.listevent.ListEventsActivity
+import com.ahgitdevelopment.goosesquizzes.ui.main.MainActivity
 import com.ahgitdevelopment.goosesquizzes.viewmodel.LoginFirebaseViewModel
 import com.ahgitdevelopment.goosesquizzes.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
-class LoginActivity : AppCompatActivity(), LoginContract.View {
+class LoginActivity : BaseActivity(), LoginContract.View {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -32,20 +30,16 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
     lateinit var presenter: LoginPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        getControllerComponent().inject(this)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val activityComponent = DaggerActivityComponent.create()
-        activityComponent.inject(this)
-
-        presenter.attach(this)
-
         loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginFirebaseViewModel::class.java)
 
+        presenter.attach(this)
         presenter.manageLoginFormState(loginViewModel, this)
-
         presenter.manageLoginResult(loginViewModel, this)
-
 
         username.afterTextChanged {
             tryLoginDataChange(username.text.toString(), password.text.toString())
@@ -64,9 +58,9 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
                 false
             }
 
-            login.setOnClickListener(OnClickListener {
+            login.setOnClickListener {
                 presenter.loginClick()
-            })
+            }
         }
     }
 
@@ -83,9 +77,8 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         loginViewModel.loginDataChanged(username, password)
     }
 
-
-    override fun enableButton(enabled: Boolean) {
-        login.isEnabled = enabled
+    override fun enableButton(enable: Boolean) {
+        login.isEnabled = enable
     }
 
     override fun setUsernameError(error: Int) {
@@ -111,11 +104,10 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
     }
 
     override fun launchLoginSuccess() {
-        startActivity(Intent(this, ListEventsActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
-
 }
-
 
 /**
  * Extension function to simplify setting an afterTextChanged action to EditText components.

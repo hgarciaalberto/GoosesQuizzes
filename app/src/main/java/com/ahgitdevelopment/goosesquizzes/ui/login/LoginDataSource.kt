@@ -4,11 +4,12 @@ import com.ahgitdevelopment.goosesquizzes.models.login.LoggedInUser
 import com.ahgitdevelopment.goosesquizzes.util.Result
 import java.io.IOException
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
-class LoginDataSource {
+class LoginDataSource @Inject constructor() {
 
     fun login(username: String, password: String): Result<LoggedInUser> {
         try {

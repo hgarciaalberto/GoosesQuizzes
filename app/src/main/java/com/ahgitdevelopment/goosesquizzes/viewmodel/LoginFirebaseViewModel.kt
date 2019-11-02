@@ -10,15 +10,16 @@ import com.ahgitdevelopment.goosesquizzes.models.login.LoggedInUserView
 import com.ahgitdevelopment.goosesquizzes.models.login.LoginFormState
 import com.ahgitdevelopment.goosesquizzes.models.login.LoginResult
 import com.google.android.gms.tasks.OnCompleteListener
+import javax.inject.Inject
 
-class LoginFirebaseViewModel(private val firebaseAuthRepository: FirebaseAuthRespository) : ViewModel() {
+class LoginFirebaseViewModel @Inject constructor(private val firebaseAuthRepository: FirebaseAuthRespository) :
+    ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
 
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
-
 
     fun login(username: String, password: String) {
         firebaseAuthRepository.emailLoginAccepted(username, password, OnCompleteListener {
