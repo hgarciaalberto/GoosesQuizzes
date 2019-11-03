@@ -1,4 +1,4 @@
-package com.ahgitdevelopment.goosesquizzes.di.common
+package com.ahgitdevelopment.goosesquizzes.base
 
 import androidx.multidex.MultiDexApplication
 import com.ahgitdevelopment.goosesquizzes.di.application.ApplicationComponent

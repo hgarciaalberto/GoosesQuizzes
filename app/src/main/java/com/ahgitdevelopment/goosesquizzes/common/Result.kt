@@ -1,4 +1,4 @@
-package com.ahgitdevelopment.goosesquizzes.util
+package com.ahgitdevelopment.goosesquizzes.common
 
 /**
  * A generic class that holds a value with its loading status.

@@ -6,10 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ahgitdevelopment.goosesquizzes.di.common.BaseFragment
+import com.ahgitdevelopment.goosesquizzes.base.BaseFragment
 import com.ahgitdevelopment.goosesquizzes.models.Event
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_event_list.*
 import javax.inject.Inject
 
@@ -35,11 +34,12 @@ class EventListFragment : BaseFragment(), EventListContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val query = FirebaseFirestore.getInstance().collection("Eventos")
+
+        val query = presenter.getEventsCollection()
 
         val options = FirestoreRecyclerOptions.Builder<Event>()
             .setLifecycleOwner(this)
-            .setQuery(query, Event::class.java)
+            .setQuery(query!!, Event::class.java)
             .build()
 
         mAdapter = EventsRecyclerAdapter(options = options)
@@ -62,8 +62,8 @@ class EventListFragment : BaseFragment(), EventListContract.View {
         mAdapter!!.stopListening()
     }
 
-    override fun showEventList(list: ArrayList<Event>) {
-//        eventListRecyclerView.mAdapter?.notifyDataSetChanged()
-    }
+//    override fun showEventList(list: ArrayList<Event>) {
+////        eventListRecyclerView.mAdapter?.notifyDataSetChanged()
+//    }
 
 }

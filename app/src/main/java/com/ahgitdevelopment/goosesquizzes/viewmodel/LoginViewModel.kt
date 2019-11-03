@@ -5,11 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ahgitdevelopment.goosesquizzes.R
+import com.ahgitdevelopment.goosesquizzes.common.Result
 import com.ahgitdevelopment.goosesquizzes.models.login.LoggedInUserView
 import com.ahgitdevelopment.goosesquizzes.models.login.LoginFormState
 import com.ahgitdevelopment.goosesquizzes.models.login.LoginResult
 import com.ahgitdevelopment.goosesquizzes.ui.login.LoginRepository
-import com.ahgitdevelopment.goosesquizzes.util.Result
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) : ViewModel() {
@@ -25,7 +25,12 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
         val result = loginRepository.login(username, password)
 
         if (result is Result.Success) {
-            _loginResult.value = LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
+            _loginResult.value = LoginResult(
+                success = LoggedInUserView(
+                    displayName = result.data.displayName,
+                    displayId = result.data.userId
+                )
+            )
         } else {
             _loginResult.value = LoginResult(error = R.string.login_failed)
         }

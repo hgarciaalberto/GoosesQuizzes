@@ -58,7 +58,7 @@ class LoginActivityTest {
     @Test
     fun loginActivity_PasswordTooShort_Test() {
         // Constants
-        var USER = "a"
+        val USER = "a"
         val PASS = "a"
 
         onView(withId(id.username)).perform(replaceText(USER))

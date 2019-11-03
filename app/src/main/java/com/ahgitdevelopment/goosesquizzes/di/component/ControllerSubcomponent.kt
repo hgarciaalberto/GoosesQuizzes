@@ -2,6 +2,7 @@ package com.ahgitdevelopment.goosesquizzes.di.component
 
 import com.ahgitdevelopment.goosesquizzes.ui.listevent.EventListFragment
 import com.ahgitdevelopment.goosesquizzes.ui.login.LoginActivity
+import com.ahgitdevelopment.goosesquizzes.ui.login.LoginPresenter
 import com.ahgitdevelopment.goosesquizzes.ui.main.MainActivity
 import dagger.Subcomponent
 
@@ -9,10 +10,12 @@ import dagger.Subcomponent
 /**
  * It is used to inject services into Activities and Fragments
  */
+@ActivityScope
 @Subcomponent(
     modules = [
         ControllerModule::class,
-        ViewModelFactoryModule::class
+        ViewModelFactoryModule::class,
+        SharedPrefsModule::class
 //        LoginModule::class,
 //        EventListModule::class
     ]
@@ -24,6 +27,8 @@ interface ControllerSubcomponent {
     fun inject(mainActivity: MainActivity)
 
     fun inject(eventListFragment: EventListFragment)
+
+    fun inject(loginPresenter: LoginPresenter)
 
 
 }

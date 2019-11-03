@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProviders
 import com.ahgitdevelopment.goosesquizzes.R
-import com.ahgitdevelopment.goosesquizzes.di.common.BaseActivity
+import com.ahgitdevelopment.goosesquizzes.base.BaseActivity
 import com.ahgitdevelopment.goosesquizzes.models.login.LoggedInUserView
 import com.ahgitdevelopment.goosesquizzes.ui.main.MainActivity
 import com.ahgitdevelopment.goosesquizzes.viewmodel.LoginFirebaseViewModel

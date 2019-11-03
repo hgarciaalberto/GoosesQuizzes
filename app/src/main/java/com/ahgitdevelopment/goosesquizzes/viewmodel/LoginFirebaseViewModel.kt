@@ -25,7 +25,12 @@ class LoginFirebaseViewModel @Inject constructor(private val firebaseAuthReposit
         firebaseAuthRepository.emailLoginAccepted(username, password, OnCompleteListener {
             if (it.isSuccessful) {
                 _loginResult.value =
-                    LoginResult(success = LoggedInUserView(displayName = firebaseAuthRepository.getCurrentUser()?.email!!))
+                    LoginResult(
+                        success = LoggedInUserView(
+                            displayName = firebaseAuthRepository.getCurrentUser()?.email!!,
+                            displayId = firebaseAuthRepository.getCurrentUser()?.uid!!
+                        )
+                    )
             } else {
                 _loginResult.value = LoginResult(error = R.string.login_failed)
             }

@@ -1,7 +1,7 @@
 package com.ahgitdevelopment.goosesquizzes.ui.login
 
+import com.ahgitdevelopment.goosesquizzes.common.Result
 import com.ahgitdevelopment.goosesquizzes.models.login.LoggedInUser
-import com.ahgitdevelopment.goosesquizzes.util.Result
 import javax.inject.Inject
 
 /**

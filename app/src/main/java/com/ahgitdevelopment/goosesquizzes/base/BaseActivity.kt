@@ -1,4 +1,4 @@
-package com.ahgitdevelopment.goosesquizzes.di.common
+package com.ahgitdevelopment.goosesquizzes.base
 
 import androidx.annotation.UiThread
 import androidx.appcompat.app.AppCompatActivity
