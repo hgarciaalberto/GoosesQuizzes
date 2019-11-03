@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.Observer
 import com.ahgitdevelopment.goosesquizzes.common.LOGIN_USER_ID
 import com.ahgitdevelopment.goosesquizzes.common.LOGIN_USER_NAME
+import com.ahgitdevelopment.goosesquizzes.di.component.LoginSharedPrefs
 import com.ahgitdevelopment.goosesquizzes.models.login.LoggedInUserView
 import com.ahgitdevelopment.goosesquizzes.viewmodel.LoginFirebaseViewModel
 import javax.inject.Inject
@@ -15,6 +16,7 @@ class LoginPresenter @Inject constructor() : LoginContract.Presenter {
     private lateinit var view: LoginContract.View
 
     @Inject
+    @field:LoginSharedPrefs
     lateinit var loginSharedPrefs: SharedPreferences
 
     override fun attach(view: LoginContract.View) {

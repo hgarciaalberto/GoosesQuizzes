@@ -2,6 +2,7 @@ package com.ahgitdevelopment.goosesquizzes.firebase.database
 
 import android.content.SharedPreferences
 import com.ahgitdevelopment.goosesquizzes.common.LOGIN_USER_ID
+import com.ahgitdevelopment.goosesquizzes.di.component.LoginSharedPrefs
 import com.ahgitdevelopment.goosesquizzes.models.Event
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,6 +25,7 @@ class FirebaseDatabaseRepository @Inject constructor() : FirebaseDatabaseReposit
 //    lateinit var loginRepository: LoginRepository
 
     @Inject
+    @field:LoginSharedPrefs
     lateinit var loginSharedPreferences: SharedPreferences
 
     private val db = FirebaseFirestore.getInstance()
