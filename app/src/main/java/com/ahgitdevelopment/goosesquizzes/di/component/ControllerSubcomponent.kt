@@ -14,8 +14,7 @@ import dagger.Subcomponent
 @Subcomponent(
     modules = [
         ControllerModule::class,
-        ViewModelFactoryModule::class,
-        SharedPrefsModule::class
+        ViewModelFactoryModule::class
 //        LoginModule::class,
 //        EventListModule::class
     ]
@@ -29,6 +28,5 @@ interface ControllerSubcomponent {
     fun inject(eventListFragment: EventListFragment)
 
     fun inject(loginPresenter: LoginPresenter)
-
 
 }

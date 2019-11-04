@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ahgitdevelopment.goosesquizzes.R
+import com.ahgitdevelopment.goosesquizzes.di.component.ActivityScope
 import com.ahgitdevelopment.goosesquizzes.firebase.auth.FirebaseAuthRespository
 import com.ahgitdevelopment.goosesquizzes.models.login.LoggedInUserView
 import com.ahgitdevelopment.goosesquizzes.models.login.LoginFormState
@@ -12,6 +13,7 @@ import com.ahgitdevelopment.goosesquizzes.models.login.LoginResult
 import com.google.android.gms.tasks.OnCompleteListener
 import javax.inject.Inject
 
+@ActivityScope
 class LoginFirebaseViewModel @Inject constructor(private val firebaseAuthRepository: FirebaseAuthRespository) :
     ViewModel() {
 

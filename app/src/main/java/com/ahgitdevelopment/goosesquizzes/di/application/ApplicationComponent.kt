@@ -3,12 +3,15 @@ package com.ahgitdevelopment.goosesquizzes.di.application
 import com.ahgitdevelopment.goosesquizzes.base.BaseApplication
 import com.ahgitdevelopment.goosesquizzes.di.component.ControllerModule
 import com.ahgitdevelopment.goosesquizzes.di.component.ControllerSubcomponent
+import com.ahgitdevelopment.goosesquizzes.di.component.SharedPrefsModule
 import dagger.Component
 
 @ApplicationScope
 @Component(
     modules = [
-        ApplicationModule::class]
+        ApplicationModule::class,
+        SharedPrefsModule::class
+    ]
 )
 interface ApplicationComponent {
 
