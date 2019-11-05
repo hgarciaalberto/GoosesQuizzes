@@ -17,10 +17,4 @@ class EventListPresenter @Inject constructor() : EventListContract.Presenter {
     override fun getEventsCollection(): CollectionReference? {
         return firestoreRepository.getEventCollection()
     }
-
-//    override fun getEventList(eventListViewModel: EventListViewModel, activity: EventListFragment){
-//        eventListViewModel.eventList.observe(activity, Observer {
-//            view.showEventList(it)
-//        })
-//    }
 }

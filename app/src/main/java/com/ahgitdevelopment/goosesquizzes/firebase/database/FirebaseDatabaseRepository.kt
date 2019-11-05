@@ -3,7 +3,6 @@ package com.ahgitdevelopment.goosesquizzes.firebase.database
 import android.content.SharedPreferences
 import com.ahgitdevelopment.goosesquizzes.common.LOGIN_USER_ID
 import com.ahgitdevelopment.goosesquizzes.di.component.LoginSharedPrefs
-import com.ahgitdevelopment.goosesquizzes.models.Event
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
@@ -16,14 +15,6 @@ private const val EVENTS_PATH: String = "events"
 
 class FirebaseDatabaseRepository @Inject constructor() : FirebaseDatabaseRepositoryContract {
 
-    interface EventFetch {
-        fun onEventFetched(events: ArrayList<Event>?)
-    }
-
-    // FIXME: No funciona porque no tengo un login a nivel de acitivity
-//    @Inject
-//    lateinit var loginRepository: LoginRepository
-
     @Inject
     @field:LoginSharedPrefs
     lateinit var loginSharedPreferences: SharedPreferences
@@ -31,14 +22,8 @@ class FirebaseDatabaseRepository @Inject constructor() : FirebaseDatabaseReposit
     private val db = FirebaseFirestore.getInstance()
 
     override fun getEventCollection(): CollectionReference? {
-//        return db.collection(EVENTS_PATH)
-//        val userId = loginRepository.user?.userId  //Para cuando tenga un login a nivel de acitivity
         val userId = loginSharedPreferences.getString(LOGIN_USER_ID, null)
-
-        return if (!userId.isNullOrEmpty())
-            db.collection(ROOT_PATH).document(userId).collection(EVENTS_PATH)
-        else
-            null
+        return db.collection(ROOT_PATH).document(userId).collection(EVENTS_PATH)
     }
 
 //    override fun fetchEventList(listener: EventFetch) {

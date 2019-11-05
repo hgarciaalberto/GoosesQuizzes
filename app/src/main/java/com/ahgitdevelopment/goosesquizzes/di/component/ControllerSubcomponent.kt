@@ -10,7 +10,6 @@ import dagger.Subcomponent
 /**
  * It is used to inject services into Activities and Fragments
  */
-@ActivityScope
 @Subcomponent(
     modules = [
         ControllerModule::class,
