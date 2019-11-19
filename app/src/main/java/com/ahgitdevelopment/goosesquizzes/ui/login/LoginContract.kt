@@ -12,11 +12,6 @@ class LoginContract {
     interface View {
         fun loginClick()
 
-        // Manage login form state
-        fun enableButton(enable: Boolean)
-        fun setUsernameError(error: Int)
-        fun setPasswordError(error: Int)
-
         // Manage login resutl
         fun showLoading(visibility: Int)
         fun showLoginFailed(error: Int)
@@ -25,7 +20,6 @@ class LoginContract {
     }
 
     interface Presenter : BaseContract.Presenter<View> {
-        fun manageLoginFormState(viewModel: LoginFirebaseViewModel, activity: LoginActivity)
         fun manageLoginResult(viewModel: LoginFirebaseViewModel, activity: LoginActivity)
         fun loginClick()
     }

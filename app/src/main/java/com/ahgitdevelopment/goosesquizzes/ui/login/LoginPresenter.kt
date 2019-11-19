@@ -23,22 +23,6 @@ class LoginPresenter @Inject constructor() : LoginContract.Presenter {
         this.view = view
     }
 
-    override fun manageLoginFormState(viewModel: LoginFirebaseViewModel, activity: LoginActivity) {
-        viewModel.loginFormState.observe(activity, Observer {
-            val loginState = it ?: return@Observer
-
-            // disable login button unless both username / password is valid
-            view.enableButton(loginState.isDataValid)
-
-            if (loginState.usernameError != null) {
-                view.setUsernameError(loginState.usernameError)
-            }
-            if (loginState.passwordError != null) {
-                view.setPasswordError(loginState.passwordError)
-            }
-        })
-    }
-
     override fun manageLoginResult(viewModel: LoginFirebaseViewModel, activity: LoginActivity) {
         viewModel.loginResult.observe(activity, Observer {
             val loginResult = it ?: return@Observer

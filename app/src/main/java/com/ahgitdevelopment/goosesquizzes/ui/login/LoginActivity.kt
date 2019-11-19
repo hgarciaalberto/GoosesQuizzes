@@ -9,15 +9,18 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.ahgitdevelopment.goosesquizzes.R
 import com.ahgitdevelopment.goosesquizzes.base.BaseActivity
+import com.ahgitdevelopment.goosesquizzes.databinding.ActivityLoginBinding
 import com.ahgitdevelopment.goosesquizzes.models.login.LoggedInUserView
 import com.ahgitdevelopment.goosesquizzes.ui.main.MainActivity
 import com.ahgitdevelopment.goosesquizzes.viewmodel.LoginFirebaseViewModel
 import com.ahgitdevelopment.goosesquizzes.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
+
 
 class LoginActivity : BaseActivity(), LoginContract.View {
 
@@ -33,12 +36,15 @@ class LoginActivity : BaseActivity(), LoginContract.View {
         getControllerComponent().inject(this)
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
 
         loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginFirebaseViewModel::class.java)
 
+        val loginBinding: ActivityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+        loginBinding.lifecycleOwner = this
+        loginBinding.loginViewModel = loginViewModel
+
+
         presenter.attach(this)
-        presenter.manageLoginFormState(loginViewModel, this)
         presenter.manageLoginResult(loginViewModel, this)
 
         username.afterTextChanged {
@@ -75,18 +81,6 @@ class LoginActivity : BaseActivity(), LoginContract.View {
 
     private fun tryLoginDataChange(username: String, password: String) {
         loginViewModel.loginDataChanged(username, password)
-    }
-
-    override fun enableButton(enable: Boolean) {
-        login.isEnabled = enable
-    }
-
-    override fun setUsernameError(error: Int) {
-        username.error = getString(error)
-    }
-
-    override fun setPasswordError(error: Int) {
-        password.error = getString(error)
     }
 
     override fun showLoading(visibility: Int) {

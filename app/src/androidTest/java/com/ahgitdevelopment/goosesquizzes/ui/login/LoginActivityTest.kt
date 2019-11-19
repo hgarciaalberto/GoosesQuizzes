@@ -6,20 +6,16 @@ import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
-import com.ahgitdevelopment.goosesquizzes.R.id
-import com.ahgitdevelopment.goosesquizzes.R.string
+import com.ahgitdevelopment.goosesquizzes.R
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
 
-@RunWith(AndroidJUnit4::class)
 @LargeTest
 class LoginActivityTest {
 
@@ -37,10 +33,18 @@ class LoginActivityTest {
         val USER = ""
         val PASS = "a"
 
-        onView(withId(id.username)).perform(replaceText(USER))
-        onView(withId(id.password)).perform(replaceText(PASS))
+        onView(withId(R.id.username)).perform(replaceText(USER))
+        onView(withId(R.id.password)).perform(replaceText(PASS))
 
-        onView(withId(id.username)).check(matches(hasErrorText(activityRule.activity.getString(string.invalid_username))))
+        onView(withId(R.id.username)).check(
+                matches(
+                        hasErrorText(
+                                activityRule.activity.getString(
+                                        R.string.invalid_username
+                                )
+                        )
+                )
+        )
     }
 
     @Test
@@ -49,10 +53,18 @@ class LoginActivityTest {
         var USER = "a@a"
         val PASS = "aaaaaa"
 
-        onView(withId(id.username)).perform(replaceText(USER))
-        onView(withId(id.password)).perform(replaceText(PASS))
+        onView(withId(R.id.username)).perform(replaceText(USER))
+        onView(withId(R.id.password)).perform(replaceText(PASS))
 
-        onView(withId(id.username)).check(matches(hasErrorText(activityRule.activity.getString(string.invalid_username))))
+        onView(withId(R.id.username)).check(
+                matches(
+                        hasErrorText(
+                                activityRule.activity.getString(
+                                        R.string.invalid_username
+                                )
+                        )
+                )
+        )
     }
 
     @Test
@@ -61,10 +73,18 @@ class LoginActivityTest {
         val USER = "a"
         val PASS = "a"
 
-        onView(withId(id.username)).perform(replaceText(USER))
-        onView(withId(id.password)).perform(replaceText(PASS))
+        onView(withId(R.id.username)).perform(replaceText(USER))
+        onView(withId(R.id.password)).perform(replaceText(PASS))
 
-        onView(withId(id.password)).check(matches(hasErrorText(activityRule.activity.getString(string.invalid_password))))
+        onView(withId(R.id.password)).check(
+                matches(
+                        hasErrorText(
+                                activityRule.activity.getString(
+                                        R.string.invalid_password
+                                )
+                        )
+                )
+        )
     }
 
     @Test
@@ -73,11 +93,11 @@ class LoginActivityTest {
         val USER = "esto_falla"
         val PASS = "me_lo_invento"
 
-        onView(withId(id.username)).perform(replaceText(USER))
-        onView(withId(id.password)).perform(replaceText(PASS))
-        onView(withId(id.login)).perform(ViewActions.click())
+        onView(withId(R.id.username)).perform(replaceText(USER))
+        onView(withId(R.id.password)).perform(replaceText(PASS))
+        onView(withId(R.id.login)).perform(ViewActions.click())
 
-        onView(withText(string.login_failed)).inRoot(withDecorView(not(`is`(activityRule.activity.window.decorView))))
+        onView(withText(R.string.login_failed)).inRoot(withDecorView(not(`is`(activityRule.activity.window.decorView))))
             .check(matches(isDisplayed()))
     }
 
@@ -88,9 +108,9 @@ class LoginActivityTest {
         val USER = "admin@admin.com"
         val PASS = "adminadmin"
 
-        onView(withId(id.username)).perform(replaceText(USER))
-        onView(withId(id.password)).perform(replaceText(PASS))
-        onView(withId(id.login)).perform(ViewActions.click())
+        onView(withId(R.id.username)).perform(replaceText(USER))
+        onView(withId(R.id.password)).perform(replaceText(PASS))
+        onView(withId(R.id.login)).perform(ViewActions.click())
 
         onView(withSubstring(USER)).inRoot(withDecorView(not(`is`(activityRule.activity.window.decorView))))
             .check(matches(isDisplayed()))

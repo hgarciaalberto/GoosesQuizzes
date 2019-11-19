@@ -6,6 +6,7 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion project.compileSdkVersion
+    buildToolsVersion = '28.0.3'
     defaultConfig {
         applicationId "com.ahgitdevelopment.goosesquizzes"
         minSdkVersion project.minSdkVersion
@@ -28,34 +29,48 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    testOptions.unitTests {
+        includeAndroidResources = true
+    }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
     // Android
-    implementation "androidx.multidex:multidex:$multidex_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "androidx.multidex:multidex:$multidexVersion"
     implementation "androidx.appcompat:appcompat:$androidxVersion"
     implementation "androidx.core:core-ktx:$androidxVersion"
     implementation "androidx.annotation:annotation:$androidxVersion"
-    implementation "androidx.appcompat:appcompat:$androidxVersion"
-    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$androidxConstraintLayoutVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$androidxLifecycleVersion"
-
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.navigation:navigation-fragment:$androidxNavigationVersion"
     implementation "androidx.navigation:navigation-ui:$androidxNavigationVersion"
     implementation "androidx.navigation:navigation-fragment-ktx:$androidxNavigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$androidxNavigationVersion"
-    implementation 'com.google.android.material:material:1.0.0'
 
     // Test
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"
+    testImplementation "org.mockito:mockito-all:$mockitoVersion"
+    testImplementation "androidx.arch.core:core-testing:$archTestingVersion"
+//    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
+
+
+    // AndroidX Test - JVM testing
+    testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
+    testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
 
     // Dagger
     api "com.google.dagger:dagger:$daggerVersion"
