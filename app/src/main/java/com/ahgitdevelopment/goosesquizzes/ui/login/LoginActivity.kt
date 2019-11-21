@@ -63,24 +63,20 @@ class LoginActivity : BaseActivity(), LoginContract.View {
                 }
                 false
             }
-
-            login.setOnClickListener {
-                presenter.loginClick()
-            }
         }
     }
 
-    override fun loginClick() {
-        loading.visibility = View.VISIBLE
-        tryLogin(username.text.toString(), password.text.toString())
-    }
-
     private fun tryLogin(username: String, password: String) {
+        loading.visibility = View.VISIBLE
         loginViewModel.login(username, password)
     }
 
     private fun tryLoginDataChange(username: String, password: String) {
         loginViewModel.loginDataChanged(username, password)
+    }
+
+    fun loginClick(view: View) {
+        tryLogin(username.text.toString(), password.text.toString())
     }
 
     override fun showLoading(visibility: Int) {

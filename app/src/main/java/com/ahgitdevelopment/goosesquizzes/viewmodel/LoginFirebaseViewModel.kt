@@ -55,15 +55,14 @@ class LoginFirebaseViewModel @Inject constructor(private val firebaseAuthReposit
         } else {
             username.isNotBlank()
         }
-
-
     }
 
-    // A placeholder password validation check
+    /**
+     * A placeholder password validation checkA placeholder password validation check
+     */
     private fun isPasswordValid(password: String): Boolean {
         return password.length > 5
     }
-
 
     override fun onComplete(@NonNull it: Task<AuthResult>) {
         if (it.isSuccessful) {

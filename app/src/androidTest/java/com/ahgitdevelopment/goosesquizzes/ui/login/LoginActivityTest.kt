@@ -1,35 +1,32 @@
 package com.ahgitdevelopment.goosesquizzes.ui.login
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import com.ahgitdevelopment.goosesquizzes.R
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
-
+@RunWith(AndroidJUnit4::class)
 @LargeTest
 class LoginActivityTest {
 
     @get:Rule
-    var activityRule: ActivityTestRule<LoginActivity> = ActivityTestRule(LoginActivity::class.java)
-
-    @Before
-    fun setUp() {
-
-    }
+    var activityRule = ActivityTestRule(LoginActivity::class.java)
 
     @Test
     fun loginActivity_UserEmpty_Test() {
-        // Constants
+
+        // Cogrnstants
         val USER = ""
         val PASS = "a"
 
@@ -50,7 +47,7 @@ class LoginActivityTest {
     @Test
     fun loginActivity_EmailNotValid_Test() {
         // Constants
-        var USER = "a@a"
+        val USER = "a@a"
         val PASS = "aaaaaa"
 
         onView(withId(R.id.username)).perform(replaceText(USER))
@@ -95,10 +92,10 @@ class LoginActivityTest {
 
         onView(withId(R.id.username)).perform(replaceText(USER))
         onView(withId(R.id.password)).perform(replaceText(PASS))
-        onView(withId(R.id.login)).perform(ViewActions.click())
+        onView(withId(R.id.login)).perform(click())
 
         onView(withText(R.string.login_failed)).inRoot(withDecorView(not(`is`(activityRule.activity.window.decorView))))
-            .check(matches(isDisplayed()))
+                .check(matches(isDisplayed()))
     }
 
     @Test
@@ -110,10 +107,10 @@ class LoginActivityTest {
 
         onView(withId(R.id.username)).perform(replaceText(USER))
         onView(withId(R.id.password)).perform(replaceText(PASS))
-        onView(withId(R.id.login)).perform(ViewActions.click())
+        onView(withId(R.id.login)).perform(click())
 
         onView(withSubstring(USER)).inRoot(withDecorView(not(`is`(activityRule.activity.window.decorView))))
-            .check(matches(isDisplayed()))
+                .check(matches(isDisplayed()))
     }
 
     // region constants

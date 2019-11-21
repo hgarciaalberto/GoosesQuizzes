@@ -50,9 +50,5 @@ class LoginPresenter @Inject constructor() : LoginContract.Presenter {
         loginSharedPrefs.edit().remove(LOGIN_USER_NAME).apply()
         loginSharedPrefs.edit().remove(LOGIN_USER_ID).apply()
     }
-
-    override fun loginClick() {
-        view.loginClick()
-    }
 }
 

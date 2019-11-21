@@ -5,8 +5,9 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+
     compileSdkVersion project.compileSdkVersion
-    buildToolsVersion = '28.0.3'
+    buildToolsVersion = '29.0.2'
     defaultConfig {
         applicationId "com.ahgitdevelopment.goosesquizzes"
         minSdkVersion project.minSdkVersion
@@ -14,7 +15,9 @@ android {
         multiDexEnabled true
         versionCode 1
         versionName "1.0"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
     }
     buildTypes {
         release {
@@ -30,8 +33,12 @@ android {
         jvmTarget = "1.8"
     }
 
-    testOptions.unitTests {
-        includeAndroidResources = true
+//    testOptions.unitTests {
+//        includeAndroidResources = true
+//    }
+
+    testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
     dataBinding {
@@ -56,21 +63,35 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$androidxNavigationVersion"
 
     // Test
-    testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"
-    testImplementation "org.mockito:mockito-all:$mockitoVersion"
     testImplementation "androidx.arch.core:core-testing:$archTestingVersion"
-//    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
-    androidTestImplementation 'androidx.test:rules:1.2.0'
+
+    // Core library
+    androidTestImplementation 'androidx.test:core:1.2.0'
+
+    // AndroidJUnitRunner and JUnit Rules
     androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestUtil 'androidx.test:orchestrator:1.2.0'
 
+    // Assertions
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation "androidx.test.ext:junit-ktx:1.1.1"
+    androidTestImplementation "androidx.test:core-ktx:1.2.0"
 
-    // AndroidX Test - JVM testing
-    testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
-    testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
-    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    // Espresso dependencies
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+//    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
+//    androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
+//    androidTestImplementation "androidx.test.espresso:espresso-accessibility:$espressoVersion"
+//    androidTestImplementation "androidx.test.espresso:espresso-web:$espressoVersion"
+//    androidTestImplementation "androidx.test.espresso.idling:idling-concurrent:$espressoVersion"
+
+    // The following Espresso dependency can be either "implementation"
+    // or "androidTestImplementation", depending on whether you want the
+    // dependency to appear on your APK's compile classpath or the test APK
+    // classpath.
+//    androidTestImplementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
+
 
     // Dagger
     api "com.google.dagger:dagger:$daggerVersion"

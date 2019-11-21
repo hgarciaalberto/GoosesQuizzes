@@ -10,7 +10,6 @@ import com.ahgitdevelopment.goosesquizzes.viewmodel.LoginFirebaseViewModel
 class LoginContract {
 
     interface View {
-        fun loginClick()
 
         // Manage login resutl
         fun showLoading(visibility: Int)
@@ -21,7 +20,6 @@ class LoginContract {
 
     interface Presenter : BaseContract.Presenter<View> {
         fun manageLoginResult(viewModel: LoginFirebaseViewModel, activity: LoginActivity)
-        fun loginClick()
     }
 
 }
