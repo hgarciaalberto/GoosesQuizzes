@@ -3,6 +3,7 @@ package com.ahgitdevelopment.goosesquizzes.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.ahgitdevelopment.goosesquizzes.doubles.respository.FakeFirebaseAuthRepository
 import com.ahgitdevelopment.goosesquizzes.testutils.getOrAwaitValue
+import com.ahgitdevelopment.goosesquizzes.ui.login.LoginFirebaseViewModel
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult

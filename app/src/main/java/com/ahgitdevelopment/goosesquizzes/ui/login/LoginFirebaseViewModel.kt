@@ -1,5 +1,6 @@
-package com.ahgitdevelopment.goosesquizzes.viewmodel
+package com.ahgitdevelopment.goosesquizzes.ui.login
 
+import android.text.Editable
 import android.util.Patterns
 import androidx.annotation.NonNull
 import androidx.lifecycle.LiveData
@@ -25,26 +26,34 @@ class LoginFirebaseViewModel @Inject constructor(private val firebaseAuthReposit
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
+    private val _showLoading = MutableLiveData<Boolean>()
+    val showLoading: LiveData<Boolean> = _showLoading
 
-    /**
-     *
-     */
-    fun login(username: String, password: String) {
-        firebaseAuthRepository.emailLoginAccepted(username, password, this)
+    // Two-way databinding, exposing MutableLiveData
+    val user = MutableLiveData<String>()
+
+    // Two-way databinding, exposing MutableLiveData
+    val password = MutableLiveData<String>()
+
+    fun login() {
+        _showLoading.value = true
+        firebaseAuthRepository.emailLoginAccepted(
+                user.value ?: "",
+                password.value ?: "",
+                this)
     }
 
-    /**
-     *
-     */
-    fun loginDataChanged(username: String, password: String) {
-        if (!isUserNameValid(username)) {
+    fun loginDataChanged(p0: Editable?) {
+        if (!isUserNameValid(user.value ?: "")) {
             _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
-        } else if (!isPasswordValid(password)) {
+        } else if (!isPasswordValid(password.value ?: "")) {
             _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
         } else {
             _loginForm.value = LoginFormState(isDataValid = true)
         }
     }
+
+    fun showLoading(show: Boolean) = run { _showLoading.value = show }
 
     /**
      *  A placeholder username validation check
@@ -66,13 +75,9 @@ class LoginFirebaseViewModel @Inject constructor(private val firebaseAuthReposit
 
     override fun onComplete(@NonNull it: Task<AuthResult>) {
         if (it.isSuccessful) {
-            _loginResult.value =
-                    LoginResult(
-                            success = LoggedInUserView(
-                                    displayName = firebaseAuthRepository.getCurrentUser()?.email!!,
-                                    displayId = firebaseAuthRepository.getCurrentUser()?.uid!!
-                            )
-                    )
+            _loginResult.value = LoginResult(success = LoggedInUserView(
+                    displayName = firebaseAuthRepository.getCurrentUser()?.email!!,
+                    displayId = firebaseAuthRepository.getCurrentUser()?.uid!!))
         } else {
             _loginResult.value = LoginResult(error = R.string.login_failed)
         }

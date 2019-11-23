@@ -1,13 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--suppress AndroidUnknownAttribute -->
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="loginViewModel"
-            type="com.ahgitdevelopment.goosesquizzes.viewmodel.LoginFirebaseViewModel" />
+            type="com.ahgitdevelopment.goosesquizzes.ui.login.LoginFirebaseViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,16 +27,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="96dp"
+            android:layout_marginTop="108dp"
             android:layout_marginEnd="24dp"
+            android:afterTextChanged="@{loginViewModel.loginDataChanged}"
             android:hint="@string/prompt_email"
             android:importantForAutofill="no"
             android:inputType="textEmailAddress"
             android:selectAllOnFocus="true"
+            android:text="@={loginViewModel.user}"
             app:errorText="@{loginViewModel.loginFormState.usernameError}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <!--        android:afterTextChanged="@{loginViewModel.loginDataChanged}"-->
 
         <EditText
             android:id="@+id/password"
@@ -43,16 +49,19 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
+            android:afterTextChanged="@{loginViewModel.loginDataChanged}"
             android:hint="@string/prompt_password"
             android:imeActionLabel="@string/action_sign_in_short"
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
             android:inputType="textPassword"
             android:selectAllOnFocus="true"
+            android:text="@={loginViewModel.password}"
             app:errorText="@{loginViewModel.loginFormState.passwordError}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/username" />
+
 
         <Button
             android:id="@+id/login"
@@ -64,7 +73,7 @@
             android:layout_marginEnd="48dp"
             android:layout_marginBottom="64dp"
             android:enabled="@{loginViewModel.loginFormState.dataValid}"
-            android:onClick="loginClick"
+            android:onClick="@{()->loginViewModel.login()}"
             android:text="@string/action_sign_in"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +90,7 @@
             android:layout_marginTop="64dp"
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="64dp"
-            android:visibility="gone"
+            android:visibility="@{loginViewModel.showLoading? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/password"
             app:layout_constraintStart_toStartOf="@+id/password"

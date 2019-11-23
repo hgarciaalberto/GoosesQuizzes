@@ -1,36 +1,36 @@
 package com.ahgitdevelopment.goosesquizzes.ui.login
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.ahgitdevelopment.goosesquizzes.R
 import com.ahgitdevelopment.goosesquizzes.base.BaseActivity
+import com.ahgitdevelopment.goosesquizzes.common.LOGIN_USER_ID
+import com.ahgitdevelopment.goosesquizzes.common.LOGIN_USER_NAME
+import com.ahgitdevelopment.goosesquizzes.common.ViewModelFactory
 import com.ahgitdevelopment.goosesquizzes.databinding.ActivityLoginBinding
+import com.ahgitdevelopment.goosesquizzes.di.component.LoginSharedPrefs
 import com.ahgitdevelopment.goosesquizzes.models.login.LoggedInUserView
 import com.ahgitdevelopment.goosesquizzes.ui.main.MainActivity
-import com.ahgitdevelopment.goosesquizzes.viewmodel.LoginFirebaseViewModel
-import com.ahgitdevelopment.goosesquizzes.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
-
-class LoginActivity : BaseActivity(), LoginContract.View {
+class LoginActivity : BaseActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    lateinit var loginViewModel: LoginFirebaseViewModel
-
     @Inject
-    lateinit var presenter: LoginPresenter
+    @field:LoginSharedPrefs
+    lateinit var loginSharedPrefs: SharedPreferences
+
+    lateinit var loginViewModel: LoginFirebaseViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         getControllerComponent().inject(this)
@@ -41,75 +41,58 @@ class LoginActivity : BaseActivity(), LoginContract.View {
 
         val loginBinding: ActivityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         loginBinding.lifecycleOwner = this
-        loginBinding.loginViewModel = loginViewModel
+        loginBinding.loginViewModel = this.loginViewModel
 
+        loginViewModel.loginResult.observe(this, Observer {
+            val loginResult = it ?: return@Observer
 
-        presenter.attach(this)
-        presenter.manageLoginResult(loginViewModel, this)
+            loginViewModel.showLoading(false)
 
-        username.afterTextChanged {
-            tryLoginDataChange(username.text.toString(), password.text.toString())
-        }
+            if (loginResult.error != null) {
+                showLoginFailed(loginResult.error)
+                clearUserLoggin()
+            }
+            if (loginResult.success != null) {
+                updateUiWithUser(loginResult.success)
+                launchLoginSuccess()
+                saveUserLogin(loginResult.success)
+            }
+        })
 
         password.apply {
-            afterTextChanged {
-                tryLoginDataChange(username.text.toString(), password.text.toString())
-            }
 
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
-                        tryLogin(username.text.toString(), password.text.toString())
+                        loginViewModel.login()
                 }
                 false
             }
         }
     }
 
-    private fun tryLogin(username: String, password: String) {
-        loading.visibility = View.VISIBLE
-        loginViewModel.login(username, password)
-    }
-
-    private fun tryLoginDataChange(username: String, password: String) {
-        loginViewModel.loginDataChanged(username, password)
-    }
-
-    fun loginClick(view: View) {
-        tryLogin(username.text.toString(), password.text.toString())
-    }
-
-    override fun showLoading(visibility: Int) {
-        loading.visibility = visibility
-    }
-
-    override fun showLoginFailed(@StringRes error: Int) {
+    private fun showLoginFailed(@StringRes error: Int) {
         Toast.makeText(applicationContext, getString(error), Toast.LENGTH_LONG).show()
     }
 
-    override fun updateUiWithUser(model: LoggedInUserView) {
+    private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
         Toast.makeText(applicationContext, "$welcome $displayName", Toast.LENGTH_LONG).show()
     }
 
-    override fun launchLoginSuccess() {
+    private fun launchLoginSuccess() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
-}
 
-/**
- * Extension function to simplify setting an afterTextChanged action to EditText components.
- */
-fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
-    this.addTextChangedListener(object : TextWatcher {
-        override fun afterTextChanged(editable: Editable?) {
-            afterTextChanged.invoke(editable.toString())
-        }
+    private fun saveUserLogin(user: LoggedInUserView) {
+        loginSharedPrefs.edit().putString(LOGIN_USER_NAME, user.displayName).apply()
+        loginSharedPrefs.edit().putString(LOGIN_USER_ID, user.displayId).apply()
+    }
 
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-    })
+    private fun clearUserLoggin() {
+        loginSharedPrefs.edit().remove(LOGIN_USER_NAME).apply()
+        loginSharedPrefs.edit().remove(LOGIN_USER_ID).apply()
+    }
 }

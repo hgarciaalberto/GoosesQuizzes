@@ -2,7 +2,6 @@ package com.ahgitdevelopment.goosesquizzes.di.component
 
 import com.ahgitdevelopment.goosesquizzes.ui.listevent.EventListFragment
 import com.ahgitdevelopment.goosesquizzes.ui.login.LoginActivity
-import com.ahgitdevelopment.goosesquizzes.ui.login.LoginPresenter
 import com.ahgitdevelopment.goosesquizzes.ui.main.MainActivity
 import dagger.Subcomponent
 
@@ -25,7 +24,5 @@ interface ControllerSubcomponent {
     fun inject(mainActivity: MainActivity)
 
     fun inject(eventListFragment: EventListFragment)
-
-    fun inject(loginPresenter: LoginPresenter)
 
 }

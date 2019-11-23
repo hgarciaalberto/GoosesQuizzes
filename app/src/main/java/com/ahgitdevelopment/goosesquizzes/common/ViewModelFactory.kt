@@ -1,7 +1,8 @@
-package com.ahgitdevelopment.goosesquizzes.viewmodel
+package com.ahgitdevelopment.goosesquizzes.common
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.ahgitdevelopment.goosesquizzes.ui.login.LoginFirebaseViewModel
 import javax.inject.Inject
 import javax.inject.Provider
 

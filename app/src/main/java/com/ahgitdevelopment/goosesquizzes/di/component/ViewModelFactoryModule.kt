@@ -1,8 +1,8 @@
 package com.ahgitdevelopment.goosesquizzes.di.component
 
+import com.ahgitdevelopment.goosesquizzes.common.ViewModelFactory
 import com.ahgitdevelopment.goosesquizzes.firebase.auth.FirebaseAuthRespository
-import com.ahgitdevelopment.goosesquizzes.viewmodel.LoginFirebaseViewModel
-import com.ahgitdevelopment.goosesquizzes.viewmodel.ViewModelFactory
+import com.ahgitdevelopment.goosesquizzes.ui.login.LoginFirebaseViewModel
 import dagger.Module
 import dagger.Provides
 import javax.inject.Provider
