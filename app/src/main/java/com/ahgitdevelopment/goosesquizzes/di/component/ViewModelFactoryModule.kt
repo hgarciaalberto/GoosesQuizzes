@@ -1,7 +1,7 @@
 package com.ahgitdevelopment.goosesquizzes.di.component
 
 import com.ahgitdevelopment.goosesquizzes.common.ViewModelFactory
-import com.ahgitdevelopment.goosesquizzes.firebase.auth.FirebaseAuthRespository
+import com.ahgitdevelopment.goosesquizzes.firebase.auth.FirebaseAuthRepository
 import com.ahgitdevelopment.goosesquizzes.ui.login.LoginFirebaseViewModel
 import dagger.Module
 import dagger.Provides
@@ -16,6 +16,6 @@ class ViewModelFactoryModule {
 
     @Provides
     fun getloginFirebaseViewModel(): LoginFirebaseViewModel {
-        return LoginFirebaseViewModel(firebaseAuthRepository = FirebaseAuthRespository())
+        return LoginFirebaseViewModel(firebaseAuthRepository = FirebaseAuthRepository())
     }
 }

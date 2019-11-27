@@ -2,23 +2,19 @@ package com.ahgitdevelopment.goosesquizzes.ui.login
 
 import android.text.Editable
 import android.util.Patterns
-import androidx.annotation.NonNull
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ahgitdevelopment.goosesquizzes.R
 import com.ahgitdevelopment.goosesquizzes.firebase.auth.FirebaseAuthRepositoryContract
-import com.ahgitdevelopment.goosesquizzes.models.login.LoggedInUserView
 import com.ahgitdevelopment.goosesquizzes.models.login.LoginFormState
 import com.ahgitdevelopment.goosesquizzes.models.login.LoginResult
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import javax.inject.Inject
 
-
-class LoginFirebaseViewModel @Inject constructor(private val firebaseAuthRepository: FirebaseAuthRepositoryContract) :
-        ViewModel(), OnCompleteListener<AuthResult> {
+class LoginFirebaseViewModel @Inject constructor(
+    private val firebaseAuthRepository: FirebaseAuthRepositoryContract
+) :
+    ViewModel(), FirebaseAuthRepositoryContract.OnLoginListener {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -29,21 +25,32 @@ class LoginFirebaseViewModel @Inject constructor(private val firebaseAuthReposit
     private val _showLoading = MutableLiveData<Boolean>()
     val showLoading: LiveData<Boolean> = _showLoading
 
-    // Two-way databinding, exposing MutableLiveData
+    /**
+     * Two-way databinding, exposing MutableLiveData
+     */
     val user = MutableLiveData<String>()
 
-    // Two-way databinding, exposing MutableLiveData
+    /**
+     * Two-way databinding, exposing MutableLiveData
+     */
     val password = MutableLiveData<String>()
 
     fun login() {
         _showLoading.value = true
+        firebaseAuthRepository.setResponseListener(this)
         firebaseAuthRepository.emailLoginAccepted(
-                user.value ?: "",
-                password.value ?: "",
-                this)
+            user.value ?: "",
+            password.value ?: ""
+        )
     }
 
-    fun loginDataChanged(p0: Editable?) {
+    /**
+     * Called over android:afterTextChanged tag in @layout/activity_login.xml
+     * It is like a BindingAdapter implemented in Android SDK
+     * @param editText: Needed param for BindingAdapter magic.
+     */
+    @Suppress("UNUSED_PARAMETER")
+    fun loginDataChanged(editText: Editable?) {
         if (!isUserNameValid(user.value ?: "")) {
             _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
         } else if (!isPasswordValid(password.value ?: "")) {
@@ -73,13 +80,7 @@ class LoginFirebaseViewModel @Inject constructor(private val firebaseAuthReposit
         return password.length > 5
     }
 
-    override fun onComplete(@NonNull it: Task<AuthResult>) {
-        if (it.isSuccessful) {
-            _loginResult.value = LoginResult(success = LoggedInUserView(
-                    displayName = firebaseAuthRepository.getCurrentUser()?.email!!,
-                    displayId = firebaseAuthRepository.getCurrentUser()?.uid!!))
-        } else {
-            _loginResult.value = LoginResult(error = R.string.login_failed)
-        }
+    override fun onLoginResult(loginResult: LoginResult) {
+        _loginResult.value = loginResult
     }
 }
