@@ -53,7 +53,7 @@ ext {
     // Third Parties
     daggerVersion = '2.25.2'
     firebaseAnalyticsVersion = "17.2.1"
-    firebaseAuthVersion = "19.1.0"
+    firebaseAuthVersion = "19.2.0"
 //    firebaseFirestoreVersion = "21.2.1"
     firebaseFirestoreUiVersion = "6.0.2"
 //    firebaseStorageVersion = "18.0.0"

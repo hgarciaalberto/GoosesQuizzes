@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/nav_eventList"
-        android:name="com.ahgitdevelopment.goosesquizzes.ui.listevent.EventListFragment"
+        android:name="com.reablace.masterquiz.ui.listevent.EventListFragment"
         android:label="EventListFragment"
         android:layout="@layout/fragment_event_list" />
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.ahgitdevelopment.goosesquizzes.ui.home.HomeFragment"
+        android:name="com.reablace.masterquiz.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 

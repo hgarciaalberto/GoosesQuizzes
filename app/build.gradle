@@ -19,7 +19,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.ahgitdevelopment.goosesquizzes"
+        applicationId "com.reablace.masterquiz"
         minSdkVersion project.minSdkVersion
         targetSdkVersion project.targetSdkVersion
         multiDexEnabled true

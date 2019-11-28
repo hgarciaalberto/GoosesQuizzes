@@ -2,12 +2,12 @@
 
 <!--suppress AndroidUnknownAttribute -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ahgitdevelopment.goosesquizzes">
+    package="com.reablace.masterquiz">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="com.ahgitdevelopment.goosesquizzes.base.BaseApplication"
+        android:name="com.reablace.masterquiz.base.BaseApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,7 +22,7 @@
             android:required="false" />
 
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name="com.reablace.masterquiz.ui.login.LoginActivity"
             android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +33,7 @@
         </activity>
 
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name="com.reablace.masterquiz.ui.main.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
