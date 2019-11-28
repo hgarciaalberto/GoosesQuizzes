@@ -5,7 +5,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -14,8 +13,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.ahgitdevelopment.goosesquizzes.R
 import com.ahgitdevelopment.goosesquizzes.base.BaseActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
 
@@ -35,15 +34,12 @@ class MainActivity : BaseActivity() {
                 .setAction("Action", null).show()
         }
 
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
+        val navController = findNavController(R.id.navController)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send
+                R.id.nav_home, R.id.nav_eventList
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -58,13 +54,15 @@ class MainActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.action_settings -> Toast.makeText(this, "Settings clicked", Toast.LENGTH_LONG).show()
+            R.id.action_settings -> Toast.makeText(
+                this, "Settings clicked", Toast.LENGTH_LONG
+            ).show()
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
+        val navController = findNavController(R.id.navController)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }
