@@ -1,8 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'com.google.gms.google-services'
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
 
@@ -70,6 +71,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui:$androidxNavigationVersion"
     implementation "androidx.navigation:navigation-fragment-ktx:$androidxNavigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$androidxNavigationVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
 
     // Test
     testImplementation "androidx.arch.core:core-testing:$archTestingVersion"
@@ -84,12 +86,17 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestUtil 'androidx.test:orchestrator:1.2.0'
 
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesAndroidVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesAndroidVersion"
+
     // Assertions
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation "androidx.test.ext:junit-ktx:1.1.1"
     androidTestImplementation "androidx.test:core-ktx:1.2.0"
 
-    // Espresso dependencies
+    // Espresso dependencies and Tests
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesAndroidVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
 //    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
 //    androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"

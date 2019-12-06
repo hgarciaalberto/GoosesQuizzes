@@ -7,8 +7,8 @@ import com.reablace.masterquiz.models.login.LoginResult
 
 const val ERROR_USER: String = "admin@"
 const val VALID_USER: String = "admin"
-const val VALID_USER_MAIL: String = "admin@admin.com"
-const val VALID_PASSWORD: String = "adminadmin"
+const val VALID_USER_MAIL: String = "a@a.com"
+const val VALID_PASSWORD: String = "123456"
 const val WRONG_PASSWORD: String = "aaaaaaa"
 const val EMPTY_STRING: String = ""
 const val SORT_PASSWORD: String = "12"

@@ -44,7 +44,7 @@ class EventListFragment : BaseFragment(), EventListContract.View {
             .setQuery(query!!, Event::class.java)
             .build()
 
-        mAdapter = EventsRecyclerAdapter(options = options)
+        mAdapter = EventsRecyclerAdapter(options)
 
         eventListRecyclerView.apply {
             setHasFixedSize(true)
