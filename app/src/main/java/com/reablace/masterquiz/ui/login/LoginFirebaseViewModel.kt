@@ -1,20 +1,28 @@
 package com.reablace.masterquiz.ui.login
 
 import android.text.Editable
+import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuthException
 import com.reablace.masterquiz.R
+import com.reablace.masterquiz.common.FIREBASE_TIMEOUT
 import com.reablace.masterquiz.firebase.auth.FirebaseAuthRepositoryContract
+import com.reablace.masterquiz.models.login.LoggedInUserView
 import com.reablace.masterquiz.models.login.LoginFormState
 import com.reablace.masterquiz.models.login.LoginResult
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import javax.inject.Inject
+
+private const val TAG: String = "LoginFirebaseViewModel"
 
 class LoginFirebaseViewModel @Inject constructor(
     private val firebaseAuthRepository: FirebaseAuthRepositoryContract
-) :
-    ViewModel(), FirebaseAuthRepositoryContract.OnLoginListener {
+) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -37,11 +45,25 @@ class LoginFirebaseViewModel @Inject constructor(
 
     fun login() {
         _showLoading.value = true
-        firebaseAuthRepository.setResponseListener(this)
-        firebaseAuthRepository.emailLoginAccepted(
-            user.value ?: "",
-            password.value ?: ""
-        )
+
+        viewModelScope.launch {
+            try {
+                withTimeout(FIREBASE_TIMEOUT) {
+                    firebaseAuthRepository.emailLoginAccepted(
+                        user.value ?: "", password.value ?: ""
+                    )
+                        .let {
+                            _loginResult.value = it
+                        } /*?: run{}*/
+                }
+            } catch (e: FirebaseAuthException) {
+                Log.e(TAG, "Error login process", e)
+                _loginResult.value =
+                    LoginResult(LoggedInUserView("", ""), error = R.string.login_failed)
+            } finally {
+                _showLoading.value = false
+            }
+        }
     }
 
     /**
@@ -78,9 +100,5 @@ class LoginFirebaseViewModel @Inject constructor(
      */
     private fun isPasswordValid(password: String): Boolean {
         return password.length > 5
-    }
-
-    override fun onLoginResult(loginResult: LoginResult) {
-        _loginResult.value = loginResult
     }
 }

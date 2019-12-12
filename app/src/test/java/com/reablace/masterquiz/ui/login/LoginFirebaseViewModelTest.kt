@@ -3,12 +3,11 @@ package com.reablace.masterquiz.ui.login
 import android.text.Editable
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.reablace.masterquiz.R
-import com.reablace.masterquiz.commontest.EMPTY_STRING
-import com.reablace.masterquiz.commontest.RESULT_SUCCESS
-import com.reablace.masterquiz.commontest.VALID_PASSWORD
-import com.reablace.masterquiz.commontest.VALID_USER
+import com.reablace.masterquiz.commontest.*
 import com.reablace.masterquiz.testutils.getOrAwaitValue
 import com.reablace.masterquiz.ui.testdouble.FirebaseAuthRepositoryTd
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
@@ -18,13 +17,16 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.junit.MockitoJUnitRunner
 
-
+@ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class LoginFirebaseViewModelTest {
 
     // region helper fields
     private lateinit var loginFirebase: LoginFirebaseViewModel
     private var firebaseAuthRepository = FirebaseAuthRepositoryTd()
+
+    @get:Rule
+    val coroutineScope = MainCoroutineScopeRule()
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
@@ -108,7 +110,7 @@ class LoginFirebaseViewModelTest {
 
 
     @Test
-    fun loginViewModel_loginPassToFirebase() {
+    fun loginViewModel_loginPassToFirebase() = runBlockingTest {
         // Arrange
         loginFirebase.user.value = VALID_USER
         loginFirebase.password.value = VALID_PASSWORD
@@ -122,12 +124,11 @@ class LoginFirebaseViewModelTest {
     }
 
     @Test
-    fun loginViewModel_validLoginResult_StoreResultForShowing() {
+    fun loginViewModel_validLoginResult_StoreResultForShowing() = runBlockingTest {
         // Arrange
         loginFirebase.user.value = VALID_USER
         loginFirebase.password.value = VALID_PASSWORD
 
-        firebaseAuthRepository.setResponseListener(loginFirebase)
         firebaseAuthRepository.loginSuccess = true
 
         // Act
@@ -139,6 +140,5 @@ class LoginFirebaseViewModelTest {
 
     // region constants
     // endregion constants
-
-
 }
+

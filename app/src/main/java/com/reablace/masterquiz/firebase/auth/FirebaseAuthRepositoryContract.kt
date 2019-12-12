@@ -5,13 +5,7 @@ import com.reablace.masterquiz.models.login.LoginResult
 
 interface FirebaseAuthRepositoryContract {
 
-    interface OnLoginListener {
-        fun onLoginResult(loginResult: LoginResult)
-    }
-
-    fun setResponseListener(listener: OnLoginListener)
-
-    fun emailLoginAccepted(email: String, password: String)
+    suspend fun emailLoginAccepted(email: String, password: String): LoginResult?
 
     fun getCurrentUser(): UserInfo?
 

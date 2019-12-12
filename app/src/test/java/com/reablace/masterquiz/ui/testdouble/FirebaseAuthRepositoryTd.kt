@@ -4,6 +4,7 @@ import com.google.firebase.auth.UserInfo
 import com.reablace.masterquiz.commontest.RESULT_FAIL
 import com.reablace.masterquiz.commontest.RESULT_SUCCESS
 import com.reablace.masterquiz.firebase.auth.FirebaseAuthRepositoryContract
+import com.reablace.masterquiz.models.login.LoginResult
 
 class FirebaseAuthRepositoryTd(
     var user: String = "",
@@ -12,21 +13,12 @@ class FirebaseAuthRepositoryTd(
 ) :
     FirebaseAuthRepositoryContract {
 
-    lateinit var loginListener: FirebaseAuthRepositoryContract.OnLoginListener
 
-    override fun setResponseListener(listener: FirebaseAuthRepositoryContract.OnLoginListener) {
-        this.loginListener = listener
-    }
-
-    override fun emailLoginAccepted(email: String, password: String) {
+    override suspend fun emailLoginAccepted(email: String, password: String): LoginResult? {
         this.user = email
         this.pass = password
 
-        if (loginSuccess) {
-            loginListener.onLoginResult(RESULT_SUCCESS)
-        } else {
-            loginListener.onLoginResult(RESULT_FAIL)
-        }
+        return if (loginSuccess) RESULT_SUCCESS else RESULT_FAIL
     }
 
     override fun getCurrentUser(): UserInfo? {

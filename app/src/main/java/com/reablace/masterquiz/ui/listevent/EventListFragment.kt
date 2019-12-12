@@ -5,11 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.reablace.masterquiz.base.BaseFragment
-import com.reablace.masterquiz.models.Event
-import kotlinx.android.synthetic.main.fragment_event_list.*
 import javax.inject.Inject
 
 
@@ -39,32 +35,22 @@ class EventListFragment : BaseFragment(), EventListContract.View {
 
         val query = presenter.getEventsCollection()
 
-        val options = FirestoreRecyclerOptions.Builder<Event>()
-            .setLifecycleOwner(this)
-            .setQuery(query!!, Event::class.java)
-            .build()
-
-        mAdapter = EventsRecyclerAdapter(options)
-
-        eventListRecyclerView.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(activity)
-            adapter = mAdapter
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        mAdapter!!.startListening()
+//        val options = FirestoreRecyclerOptions.Builder<Event>()
+//            .setLifecycleOwner(this)
+//            .setQuery(query!!, Event::class.java)
+//            .build()
+//
+//        mAdapter = EventsRecyclerAdapter(options)
+//
+//        eventListRecyclerView.apply {
+//            setHasFixedSize(true)
+//            layoutManager = LinearLayoutManager(activity)
+//            adapter = mAdapter
+//        }
     }
 
 
-    override fun onStop() {
-        super.onStop()
-        mAdapter!!.stopListening()
-    }
-
-//    override fun showEventList(list: ArrayList<Event>) {
+    //    override fun showEventList(list: ArrayList<Event>) {
 ////        eventListRecyclerView.mAdapter?.notifyDataSetChanged()
 //    }
 

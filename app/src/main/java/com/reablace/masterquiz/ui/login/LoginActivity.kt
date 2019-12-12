@@ -40,13 +40,13 @@ class LoginActivity : BaseActivity() {
         loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginFirebaseViewModel::class.java)
 
         val loginBinding: ActivityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
-        loginBinding.lifecycleOwner = this
-        loginBinding.loginViewModel = this.loginViewModel
+        loginBinding.apply {
+            lifecycleOwner = this@LoginActivity
+            loginViewModel = this@LoginActivity.loginViewModel
+        }
 
         loginViewModel.loginResult.observe(this, Observer {
             val loginResult = it ?: return@Observer
-
-            loginViewModel.showLoading(false)
 
             if (loginResult.error != null) {
                 showLoginFailed(loginResult.error)
