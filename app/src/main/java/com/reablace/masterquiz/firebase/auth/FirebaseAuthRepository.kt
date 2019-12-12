@@ -8,7 +8,6 @@ import com.reablace.masterquiz.models.login.LoggedInUserView
 import com.reablace.masterquiz.models.login.LoginResult
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
-import kotlin.coroutines.migration.toExperimentalCoroutineContext
 
 private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
