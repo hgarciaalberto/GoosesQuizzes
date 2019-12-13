@@ -1,9 +1,9 @@
 package com.reablace.masterquiz.di.component
 
 import android.content.Context
-import android.content.SharedPreferences
 import com.reablace.masterquiz.common.DATA_SHARED_PREFERENCES
-import com.reablace.masterquiz.common.LOGIN_SHARED_PREFERENCES
+import com.reablace.masterquiz.common.MySharedPrefsManager
+import com.reablace.masterquiz.common.USER_SESION_SHARED_PREFERENCES
 import dagger.Module
 import dagger.Provides
 import javax.inject.Qualifier
@@ -13,14 +13,14 @@ class SharedPrefsModule {
 
     @LoginSharedPrefs
     @Provides
-    fun provideLoginSharedPreferences(context: Context): SharedPreferences {
-        return context.getSharedPreferences(LOGIN_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+    fun provideLoginSharedPreferences(context: Context): MySharedPrefsManager {
+        return MySharedPrefsManager(context, USER_SESION_SHARED_PREFERENCES, Context.MODE_PRIVATE)
     }
 
     @Provides
     @DataSharedPrefs
-    fun provideDataSharedPreferences(context: Context): SharedPreferences {
-        return context.getSharedPreferences(DATA_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+    fun provideDataSharedPreferences(context: Context): MySharedPrefsManager {
+        return MySharedPrefsManager(context, DATA_SHARED_PREFERENCES, Context.MODE_PRIVATE)
     }
 }
 

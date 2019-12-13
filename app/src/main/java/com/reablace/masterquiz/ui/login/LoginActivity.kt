@@ -1,7 +1,6 @@
 package com.reablace.masterquiz.ui.login
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
@@ -11,8 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.reablace.masterquiz.R
 import com.reablace.masterquiz.base.BaseActivity
-import com.reablace.masterquiz.common.LOGIN_USER_ID
-import com.reablace.masterquiz.common.LOGIN_USER_NAME
+import com.reablace.masterquiz.common.MySharedPrefsManager
 import com.reablace.masterquiz.common.ViewModelFactory
 import com.reablace.masterquiz.databinding.ActivityLoginBinding
 import com.reablace.masterquiz.di.component.LoginSharedPrefs
@@ -28,7 +26,7 @@ class LoginActivity : BaseActivity() {
 
     @Inject
     @field:LoginSharedPrefs
-    lateinit var loginSharedPrefs: SharedPreferences
+    lateinit var userSesionSharedPrefs: MySharedPrefsManager
 
     lateinit var loginViewModel: LoginFirebaseViewModel
 
@@ -50,7 +48,7 @@ class LoginActivity : BaseActivity() {
 
             if (loginResult.error != null) {
                 showLoginFailed(loginResult.error)
-                clearUserLoggin()
+                clearUserData()
             }
             if (loginResult.success != null) {
                 updateUiWithUser(loginResult.success)
@@ -87,12 +85,10 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun saveUserLogin(user: LoggedInUserView) {
-        loginSharedPrefs.edit().putString(LOGIN_USER_NAME, user.displayName).apply()
-        loginSharedPrefs.edit().putString(LOGIN_USER_ID, user.displayId).apply()
+        userSesionSharedPrefs.addLoginData(user)
     }
 
-    private fun clearUserLoggin() {
-        loginSharedPrefs.edit().remove(LOGIN_USER_NAME).apply()
-        loginSharedPrefs.edit().remove(LOGIN_USER_ID).apply()
+    private fun clearUserData() {
+        userSesionSharedPrefs.clearUserSessionData()
     }
 }

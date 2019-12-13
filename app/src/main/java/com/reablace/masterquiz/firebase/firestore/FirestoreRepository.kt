@@ -1,35 +1,44 @@
-package com.reablace.masterquiz.firebase.database
+package com.reablace.masterquiz.firebase.firestore
 
-import android.content.SharedPreferences
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.reablace.masterquiz.common.*
 import com.reablace.masterquiz.di.component.LoginSharedPrefs
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 
 private const val TAG: String = "FirebaseDatabaseRep"
 
-private const val PLAYERS_ROOT: String = "Players"
-private const val QUESTIONS_ROOT: String = "Questions"
-private const val QUIZZES_ROOT: String = "Quizzes"
-private const val TENANCIES_ROOT: String = "Tenancies"
-private const val USERS_TENANCIES_ROOT: String = "UsersTenancies"
 
-class FirebaseDatabaseRepository @Inject constructor() : FirebaseDatabaseRepositoryContract {
+class FirestoreRepository @Inject constructor() : FirestoreRepositoryContract {
 
     @Inject
     @field:LoginSharedPrefs
-    lateinit var loginSharedPreferences: SharedPreferences
+    lateinit var userSesionSharedPrefs: MySharedPrefsManager
 
     private val db = FirebaseFirestore.getInstance()
+
+
+    override suspend fun getUserTenancy(user: String): String? {
+        try {
+            val snapshot = db.collection(TENANTS_ROOT).document(user).get().await()
+            return userSesionSharedPrefs.getUserTenancyId().let {
+                snapshot.getString(it)
+            }
+        } catch (e: FirebaseFirestoreException) {
+            throw e
+        }
+    }
+
 
 
     override fun getPlayersCollection(): CollectionReference? = db.collection(PLAYERS_ROOT)
     override fun getQuestionsCollection(): CollectionReference? = db.collection(QUESTIONS_ROOT)
     override fun getQuizzesCollection(): CollectionReference? = db.collection(QUIZZES_ROOT)
     override fun getTenanciesCollection(): CollectionReference? = db.collection(TENANCIES_ROOT)
-    override fun getUsersTenanciesCollection(): CollectionReference? =
-        db.collection(USERS_TENANCIES_ROOT)
+    override fun getUsersTenanciesCollection(): CollectionReference? = db.collection(USERS_TENANCIES_ROOT)
 
 
 //    override fun getEventCollection(): CollectionReference? {

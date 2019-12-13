@@ -1,8 +1,11 @@
-package com.reablace.masterquiz.firebase.database
+package com.reablace.masterquiz.firebase.firestore
 
 import com.google.firebase.firestore.CollectionReference
 
-interface FirebaseDatabaseRepositoryContract {
+interface FirestoreRepositoryContract {
+
+
+    suspend fun getUserTenancy(user: String): String?
 
     fun getPlayersCollection(): CollectionReference?
     fun getQuestionsCollection(): CollectionReference?
