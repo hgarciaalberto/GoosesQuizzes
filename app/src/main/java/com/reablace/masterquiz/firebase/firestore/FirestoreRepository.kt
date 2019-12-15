@@ -2,36 +2,26 @@ package com.reablace.masterquiz.firebase.firestore
 
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.reablace.masterquiz.common.*
-import com.reablace.masterquiz.di.component.LoginSharedPrefs
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-
 private const val TAG: String = "FirebaseDatabaseRep"
-
 
 class FirestoreRepository @Inject constructor() : FirestoreRepositoryContract {
 
-    @Inject
-    @field:LoginSharedPrefs
-    lateinit var userSesionSharedPrefs: MySharedPrefsManager
-
     private val db = FirebaseFirestore.getInstance()
 
+    //TODO: Change String result to Result Object
+    override suspend fun getUserTenancy(userAuthId: String): String {
+        val snapshot = db.collection(USER_TENANCIES_ROOT).document(userAuthId).get().await()
 
-    override suspend fun getUserTenancy(user: String): String? {
-        try {
-            val snapshot = db.collection(TENANTS_ROOT).document(user).get().await()
-            return userSesionSharedPrefs.getUserTenancyId().let {
-                snapshot.getString(it)
-            }
-        } catch (e: FirebaseFirestoreException) {
-            throw e
+        return if (snapshot.exists()) {
+            snapshot.getString(USERS_TENANCIES_FIELD_ID) ?: ""
+        } else {
+            ""
         }
     }
-
 
 
     override fun getPlayersCollection(): CollectionReference? = db.collection(PLAYERS_ROOT)

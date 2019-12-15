@@ -5,6 +5,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -14,9 +17,24 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.reablace.masterquiz.R
 import com.reablace.masterquiz.base.BaseActivity
+import com.reablace.masterquiz.common.MySharedPrefsManager
+import com.reablace.masterquiz.common.ViewModelFactory
+import com.reablace.masterquiz.databinding.ActivityMainBinding
+import com.reablace.masterquiz.di.component.LoginSharedPrefs
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
+
 
 class MainActivity : BaseActivity() {
+
+    @Inject
+    @field:LoginSharedPrefs
+    lateinit var userSesionSharedPrefs: MySharedPrefsManager
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private lateinit var mainViewModel: MainViewModel
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -24,7 +42,16 @@ class MainActivity : BaseActivity() {
         getControllerComponent().inject(this)
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
+
+        val mainBinding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        mainBinding.apply {
+            lifecycleOwner = this@MainActivity
+            mainViewModel = this@MainActivity.mainViewModel
+        }
+
+
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
@@ -46,6 +73,17 @@ class MainActivity : BaseActivity() {
         navView.setupWithNavController(navController)
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        val userAuthId = userSesionSharedPrefs.getUserAuthId()
+
+        mainViewModel.getUserTenancy(userAuthId)
+        mainViewModel.tenancyId.observe(this, Observer {
+            userSesionSharedPrefs.setUserTenancyId(it)
+        })
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
@@ -65,4 +103,5 @@ class MainActivity : BaseActivity() {
         val navController = findNavController(R.id.navController)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
 }

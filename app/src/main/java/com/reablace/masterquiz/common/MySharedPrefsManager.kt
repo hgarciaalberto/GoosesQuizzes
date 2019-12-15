@@ -19,6 +19,7 @@ class MySharedPrefsManager @Inject constructor(context: Context, StorageName: St
 
     override fun getUserAuthId(): String = prefs.getString(USER_SESION_AUTH_ID, "")!!
 
+    override fun setUserTenancyId(tenancyId: String) = prefs.edit().putString(USER_SESION_TENANT_ID, tenancyId).apply()
     override fun getUserTenancyId(): String = prefs.getString(USER_SESION_TENANT_ID, "")!!
 
 
@@ -29,5 +30,7 @@ interface MySharedPrefsContract {
     fun clearUserSessionData()
     fun addLoginData(user: LoggedInUserView)
     fun getUserAuthId(): String
+
+    fun setUserTenancyId(tenancyId: String)
     fun getUserTenancyId(): String
 }
