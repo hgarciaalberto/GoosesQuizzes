@@ -88,25 +88,25 @@ class LoginFirebaseViewModelTest {
         )
     }
 
-    @Test
-    fun loginViewModel_showLoading() {
-        // Arrange
-        val showLoading = true
-        // Act
-        loginFirebase.showLoading(showLoading)
-        // Assert
-        assertThat(showLoading, `is`(loginFirebase.showLoading.getOrAwaitValue()))
-    }
-
-    @Test
-    fun loginViewModel_hideLoading() {
-        // Arrange
-        val showLoading = false
-        // Act
-        loginFirebase.showLoading(showLoading)
-        // Assert
-        assertThat(showLoading, `is`(loginFirebase.showLoading.getOrAwaitValue()))
-    }
+//    @Test
+//    fun loginViewModel_showLoading() {
+//        // Arrange
+//        val showLoading = true
+//        // Act
+//        loginFirebase.showLoading(showLoading)
+//        // Assert
+//        assertThat(showLoading, `is`(loginFirebase.showLoading.getOrAwaitValue()))
+//    }
+//
+//    @Test
+//    fun loginViewModel_hideLoading() {
+//        // Arrange
+//        val showLoading = false
+//        // Act
+//        loginFirebase.showLoading(showLoading)
+//        // Assert
+//        assertThat(showLoading, `is`(loginFirebase.showLoading.getOrAwaitValue()))
+//    }
 
 
     @Test

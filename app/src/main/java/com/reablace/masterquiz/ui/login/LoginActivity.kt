@@ -28,7 +28,7 @@ class LoginActivity : BaseActivity() {
     @field:LoginSharedPrefs
     lateinit var userSesionSharedPrefs: MySharedPrefsManager
 
-    lateinit var loginViewModel: LoginFirebaseViewModel
+    private lateinit var loginViewModel: LoginFirebaseViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         getControllerComponent().inject(this)
@@ -49,9 +49,8 @@ class LoginActivity : BaseActivity() {
             if (loginResult.error != null) {
                 showLoginFailed(loginResult.error)
                 clearUserData()
-            }
-            if (loginResult.success != null) {
-                updateUiWithUser(loginResult.success)
+            } else {
+                updateUiWithUser(loginResult.success!!)
                 launchLoginSuccess()
                 saveUserLogin(loginResult.success)
             }
@@ -73,9 +72,9 @@ class LoginActivity : BaseActivity() {
         Toast.makeText(applicationContext, getString(error), Toast.LENGTH_LONG).show()
     }
 
-    private fun updateUiWithUser(model: LoggedInUserView) {
+    private fun updateUiWithUser(loginResult: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
-        val displayName = model.displayName
+        val displayName = loginResult.displayName
         Toast.makeText(applicationContext, "$welcome $displayName", Toast.LENGTH_LONG).show()
     }
 

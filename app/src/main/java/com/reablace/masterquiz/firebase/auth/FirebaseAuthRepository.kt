@@ -27,7 +27,7 @@ class FirebaseAuthRepository @Inject constructor() : FirebaseAuthRepositoryContr
             LoginResult(
                 success = LoggedInUserView(
                     displayName = firebaseUser.user?.email!!,
-                    displayId = firebaseUser.user?.providerId!!
+                    displayId = firebaseUser.user?.uid!!
                 ),
                 error = null
             )

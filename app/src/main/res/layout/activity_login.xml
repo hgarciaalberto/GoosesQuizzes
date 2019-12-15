@@ -29,7 +29,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="108dp"
             android:layout_marginEnd="24dp"
-            android:afterTextChanged="@{loginViewModel.loginDataChanged}"
+            android:afterTextChanged="@{loginViewModel::loginDataChanged}"
             android:hint="@string/prompt_email"
             android:importantForAutofill="no"
             android:inputType="textEmailAddress"
@@ -40,8 +40,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!--        android:afterTextChanged="@{loginViewModel.loginDataChanged}"-->
-
         <EditText
             android:id="@+id/password"
             android:layout_width="0dp"
@@ -49,7 +47,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
-            android:afterTextChanged="@{loginViewModel.loginDataChanged}"
+            android:afterTextChanged="@{loginViewModel::loginDataChanged}"
             android:hint="@string/prompt_password"
             android:imeActionLabel="@string/action_sign_in_short"
             android:imeOptions="actionDone"
