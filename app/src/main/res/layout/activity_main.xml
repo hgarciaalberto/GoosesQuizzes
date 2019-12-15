@@ -5,8 +5,6 @@
 
     <data>
 
-        <import type="android.view.View" />
-
         <variable
             name="mainViewModel"
             type="com.reablace.masterquiz.ui.main.MainViewModel" />
@@ -20,59 +18,12 @@
         android:fitsSystemWindows="true"
         tools:openDrawer="start">
 
-        <!--        <include-->
-        <!--            layout="@layout/app_bar_main"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            app:mainViewModel="@{mainViewModel}" />-->
-
-        <!--        android:id="@+id/includeAppBarMain"-->
-
-
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <include
+            android:id="@+id/includeAppBarMain"
+            layout="@layout/app_bar_main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.appbar.AppBarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/AppTheme.AppBarOverlay">
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
-                    app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-            </com.google.android.material.appbar.AppBarLayout>
-
-            <include layout="@layout/content_main" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/fab_margin"
-                app:srcCompat="@android:drawable/ic_menu_edit" />
-
-            <ProgressBar
-                android:id="@+id/loading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="64dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginBottom="64dp"
-                android:visibility="@{mainViewModel.showLoading? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.3" />
-
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            android:layout_height="match_parent"
+            app:secundaryMainViewModel="@{mainViewModel}" />
 
 
         <com.google.android.material.navigation.NavigationView
