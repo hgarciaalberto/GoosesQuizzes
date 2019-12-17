@@ -10,23 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.reablace.masterquiz.R
 import com.reablace.masterquiz.base.BaseActivity
-import com.reablace.masterquiz.common.MySharedPrefsManager
-import com.reablace.masterquiz.common.ViewModelFactory
 import com.reablace.masterquiz.databinding.ActivityLoginBinding
-import com.reablace.masterquiz.di.component.LoginSharedPrefs
 import com.reablace.masterquiz.models.login.LoggedInUserView
 import com.reablace.masterquiz.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
-import javax.inject.Inject
 
 class LoginActivity : BaseActivity() {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    @Inject
-    @field:LoginSharedPrefs
-    lateinit var userSesionSharedPrefs: MySharedPrefsManager
 
     private lateinit var loginViewModel: LoginFirebaseViewModel
 
@@ -36,7 +25,6 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginFirebaseViewModel::class.java)
-
         val loginBinding: ActivityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         loginBinding.apply {
             lifecycleOwner = this@LoginActivity
@@ -51,13 +39,16 @@ class LoginActivity : BaseActivity() {
                 clearUserData()
             } else {
                 updateUiWithUser(loginResult.success!!)
-                launchLoginSuccess()
                 saveUserLogin(loginResult.success)
+                launchLoginSuccess()
             }
         })
 
-        password.apply {
+        loginViewModel.password.observe(this, Observer {
+            userTenancy = it
+        })
 
+        password.apply {
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->

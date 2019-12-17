@@ -6,11 +6,7 @@ import com.reablace.masterquiz.commontest.RESULT_SUCCESS
 import com.reablace.masterquiz.firebase.auth.FirebaseAuthRepositoryContract
 import com.reablace.masterquiz.models.login.LoginResult
 
-class FirebaseAuthRepositoryTd(
-    var user: String = "",
-    var pass: String = "",
-    var loginSuccess: Boolean = false
-) :
+class FirebaseAuthRepositoryTd(var user: String = "", var pass: String = "", var loginSuccess: Boolean = false) :
     FirebaseAuthRepositoryContract {
 
 

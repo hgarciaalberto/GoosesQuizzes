@@ -6,6 +6,7 @@ import com.reablace.masterquiz.R
 import com.reablace.masterquiz.commontest.*
 import com.reablace.masterquiz.testutils.getOrAwaitValue
 import com.reablace.masterquiz.ui.testdouble.FirebaseAuthRepositoryTd
+import com.reablace.masterquiz.ui.testdouble.FirestoreRepositoryTd
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
@@ -25,6 +26,8 @@ class LoginFirebaseViewModelTest {
     private lateinit var loginFirebase: LoginFirebaseViewModel
     private var firebaseAuthRepository = FirebaseAuthRepositoryTd()
 
+    private var firestoreRepository = FirestoreRepositoryTd()
+
     @get:Rule
     val coroutineScope = MainCoroutineScopeRule()
 
@@ -34,7 +37,7 @@ class LoginFirebaseViewModelTest {
 
     @Before
     fun setup() {
-        loginFirebase = LoginFirebaseViewModel(firebaseAuthRepository)
+        loginFirebase = LoginFirebaseViewModel(firebaseAuthRepository, firestoreRepository)
     }
 
     @Test

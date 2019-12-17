@@ -20,11 +20,13 @@ const val ROOT: String = "root/${BuildConfig.FIRESTORE_FLAVOR}"
 const val PLAYERS_ROOT: String = "${ROOT}/players"
 const val QUESTIONS_ROOT: String = "${ROOT}/questions"
 const val QUIZZES_ROOT: String = "${ROOT}/quizzes"
+
+// Tenancies node
 const val TENANCIES_ROOT: String = "${ROOT}/tenancies"
-const val USER_TENANCIES_ROOT: String = "${ROOT}/userstenancies"
+const val TENANCY_EVENTS: String = "events"
 
 // Users Tenancies node
-const val USERS_TENANCIES_ROOT: String = "${ROOT}/usersTenancies"
+const val USERS_TENANCIES_ROOT: String = "${ROOT}/userstenancies"
 const val USERS_TENANCIES_FIELD_ID: String = "tenancyId"
 
 const val FIREBASE_TIMEOUT: Long = 5_000

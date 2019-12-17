@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
+    <!--    <data>-->
 
-        <variable
-            name="mainViewModel"
-            type="com.reablace.masterquiz.ui.main.MainViewModel" />
-    </data>
+    <!--        <variable-->
+    <!--            name="mainViewModel"-->
+    <!--            type="com.reablace.masterquiz.ui.main.EventListViewModel" />-->
+    <!--    </data>-->
 
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -19,11 +19,12 @@
         tools:openDrawer="start">
 
         <include
-            android:id="@+id/includeAppBarMain"
             layout="@layout/app_bar_main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:secundaryMainViewModel="@{mainViewModel}" />
+            android:layout_height="match_parent" />
+
+        <!--        android:id="@+id/includeAppBarMain"-->
+        <!--        app:secundaryMainViewModel="@{mainViewModel}"-->
 
 
         <com.google.android.material.navigation.NavigationView

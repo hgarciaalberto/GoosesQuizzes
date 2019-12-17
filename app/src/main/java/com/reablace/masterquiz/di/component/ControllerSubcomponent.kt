@@ -1,5 +1,6 @@
 package com.reablace.masterquiz.di.component
 
+import com.reablace.masterquiz.base.BaseActivity
 import com.reablace.masterquiz.ui.listevent.EventListFragment
 import com.reablace.masterquiz.ui.login.LoginActivity
 import com.reablace.masterquiz.ui.main.MainActivity
@@ -12,11 +13,13 @@ import dagger.Subcomponent
 @Subcomponent(
     modules = [
         ControllerModule::class,
-        ViewModelFactoryModule::class
-//        EventListModule::class
+        ViewModelFactoryModule::class,
+        SharedPrefsModule::class
     ]
 )
 interface ControllerSubcomponent {
+
+    fun inject(baseActivity: BaseActivity)
 
     fun inject(loginActivity: LoginActivity)
 

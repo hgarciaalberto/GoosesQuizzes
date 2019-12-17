@@ -3,7 +3,7 @@ package com.reablace.masterquiz.common
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.reablace.masterquiz.ui.login.LoginFirebaseViewModel
-import com.reablace.masterquiz.ui.main.MainViewModel
+import com.reablace.masterquiz.ui.main.EventListViewModel
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -13,17 +13,17 @@ import javax.inject.Provider
  */
 class ViewModelFactory @Inject constructor(
     loginFirebaseViewModelProvider: Provider<LoginFirebaseViewModel>,
-    mainViewModelProvider: Provider<MainViewModel>) :
+    eventListViewModelProvider: Provider<EventListViewModel>) :
     ViewModelProvider.Factory {
 
     private var mLoginFirebaseViewModelProvider: Provider<LoginFirebaseViewModel> = loginFirebaseViewModelProvider
-    private var mMainViewModelProvider: Provider<MainViewModel> = mainViewModelProvider
+    private var mEventListViewModelProvider: Provider<EventListViewModel> = eventListViewModelProvider
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when (modelClass) {
             LoginFirebaseViewModel::class.java -> mLoginFirebaseViewModelProvider.get() as T
-            MainViewModel::class.java -> mMainViewModelProvider.get() as T
+            EventListViewModel::class.java -> mEventListViewModelProvider.get() as T
 
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }

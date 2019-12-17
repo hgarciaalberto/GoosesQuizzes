@@ -1,7 +1,9 @@
 package com.reablace.masterquiz.firebase.firestore
 
+import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.reablace.masterquiz.common.*
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -14,13 +16,18 @@ class FirestoreRepository @Inject constructor() : FirestoreRepositoryContract {
 
     //TODO: Change String result to Result Object
     override suspend fun getUserTenancy(userAuthId: String): String {
-        val snapshot = db.collection(USER_TENANCIES_ROOT).document(userAuthId).get().await()
+        val snapshot = db.collection(USERS_TENANCIES_ROOT).document(userAuthId).get().await()
 
         return if (snapshot.exists()) {
             snapshot.getString(USERS_TENANCIES_FIELD_ID) ?: ""
         } else {
             ""
         }
+    }
+
+    override suspend fun getEventCollection(userTenancyId: String): QuerySnapshot {
+        Log.i(TAG, "User tenancyId: $userTenancyId")
+        return db.collection(TENANCIES_ROOT).document(userTenancyId).collection(TENANCY_EVENTS).get().await()
     }
 
 

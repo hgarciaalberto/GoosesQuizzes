@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.main.MainActivity">
 
-    <data>
+    <!--    <data>-->
 
-        <import type="android.view.View" />
+    <!--        <import type="android.view.View" />-->
 
-        <variable
-            name="secundaryMainViewModel"
-            type="com.reablace.masterquiz.ui.main.MainViewModel" />
-    </data>
+    <!--        <variable-->
+    <!--            name="secundaryMainViewModel"-->
+    <!--            type="com.reablace.masterquiz.ui.main.EventListViewModel" />-->
+    <!--    </data>-->
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -41,20 +41,19 @@
             android:layout_margin="@dimen/fab_margin"
             app:srcCompat="@android:drawable/ic_menu_edit" />
 
-        <ProgressBar
-            android:id="@+id/loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="64dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="64dp"
-            android:visibility="@{secundaryMainViewModel.showLoading? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3" />
-
+        <!--        <ProgressBar-->
+        <!--            android:id="@+id/loading"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_gravity="center"-->
+        <!--            android:layout_marginStart="32dp"-->
+        <!--            android:layout_marginTop="64dp"-->
+        <!--            android:layout_marginEnd="32dp"-->
+        <!--            android:layout_marginBottom="64dp"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:layout_constraintVertical_bias="0.3" />-->
+        <!--        android:visibility="@{secundaryMainViewModel.showLoading? View.VISIBLE : View.GONE}"-->
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

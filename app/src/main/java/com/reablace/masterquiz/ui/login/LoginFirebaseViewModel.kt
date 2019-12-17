@@ -7,10 +7,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.reablace.masterquiz.R
 import com.reablace.masterquiz.base.BaseViewModel
 import com.reablace.masterquiz.common.FIREBASE_TIMEOUT
 import com.reablace.masterquiz.firebase.auth.FirebaseAuthRepositoryContract
+import com.reablace.masterquiz.firebase.firestore.FirestoreRepositoryContract
 import com.reablace.masterquiz.models.login.LoggedInUserView
 import com.reablace.masterquiz.models.login.LoginFormState
 import com.reablace.masterquiz.models.login.LoginResult
@@ -21,7 +23,8 @@ import javax.inject.Inject
 private const val TAG: String = "LoginFirebaseViewModel"
 
 class LoginFirebaseViewModel @Inject constructor(
-    private val firebaseAuthRepository: FirebaseAuthRepositoryContract) : BaseViewModel() {
+    private val firebaseAuthRepository: FirebaseAuthRepositoryContract,
+    private var firestoreRepository: FirestoreRepositoryContract) : BaseViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -42,12 +45,15 @@ class LoginFirebaseViewModel @Inject constructor(
     fun login() {
 
         viewModelScope.launch {
+            Log.i(TAG, "Login - Show loading")
             _showLoading.value = true
             try {
                 withTimeout(FIREBASE_TIMEOUT) {
                     firebaseAuthRepository.emailLoginAccepted(
                         user.value ?: "", password.value ?: "").let {
+                        storeUserTenancy(it?.success?.displayId ?: "")
                         _loginResult.value = it
+
                     } /*?: run{}*/
                 }
             } catch (e: FirebaseAuthException) {
@@ -56,7 +62,21 @@ class LoginFirebaseViewModel @Inject constructor(
                     LoginResult(LoggedInUserView("", ""), error = R.string.login_failed)
             } finally {
                 _showLoading.value = false
+                Log.i(TAG, "login - Hide loading")
             }
+        }
+    }
+
+    private suspend fun storeUserTenancy(userAuthId: String) {
+        try {
+            withTimeout(FIREBASE_TIMEOUT) {
+                firestoreRepository.getUserTenancy(userAuthId).let {
+                    password.value = it
+                    Log.i(TAG, "Tenancy value: $it")
+                }
+            }
+        } catch (e: FirebaseFirestoreException) {
+            Log.i(TAG, "Error conecting Firestore database", e)
         }
     }
 
