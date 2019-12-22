@@ -29,6 +29,16 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
+        signingConfig signingConfigs.debug
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Android\\.android\\debug.keystore')
+            storePassword 'android'
+            keyAlias = 'androiddebugkey'
+            keyPassword 'android'
+        }
     }
 
     buildTypes {
@@ -50,6 +60,7 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -140,7 +151,6 @@ dependencies {
 //    implementation "com.google.firebase:firebase-firestore:$firebaseFirestoreVersion"
     implementation "com.firebaseui:firebase-ui-firestore:$firebaseFirestoreUiVersion"
     implementation "com.google.firebase:firebase-firestore-ktx:$firebaseFirestoreVersion"
-
 
 
 }

@@ -8,7 +8,6 @@ open class BaseApplication : MultiDexApplication() {
 
     // Instance of the AppComponent that will be used by all the Activities in the project
     private val appComponent: ApplicationComponent by lazy {
-
         DaggerApplicationComponent.create()
     }
 

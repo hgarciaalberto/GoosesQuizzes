@@ -1,6 +1,5 @@
 package com.reablace.masterquiz.firebase.firestore
 
-import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -25,11 +24,9 @@ class FirestoreRepository @Inject constructor() : FirestoreRepositoryContract {
         }
     }
 
-    override suspend fun getEventCollection(userTenancyId: String): QuerySnapshot {
-        Log.i(TAG, "User tenancyId: $userTenancyId")
-        return db.collection(TENANCIES_ROOT).document(userTenancyId).collection(TENANCY_EVENTS).get().await()
+    override suspend fun getEventList(): QuerySnapshot {
+        return db.collection(EVENTS_ROOTS).get().await()
     }
-
 
     override fun getPlayersCollection(): CollectionReference? = db.collection(PLAYERS_ROOT)
     override fun getQuestionsCollection(): CollectionReference? = db.collection(QUESTIONS_ROOT)

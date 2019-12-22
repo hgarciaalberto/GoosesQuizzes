@@ -6,7 +6,7 @@ import com.google.firebase.firestore.QuerySnapshot
 interface FirestoreRepositoryContract {
 
     suspend fun getUserTenancy(userAuthId: String): String
-    suspend fun getEventCollection(userTenancyId: String): QuerySnapshot
+    suspend fun getEventList(): QuerySnapshot
 
     fun getPlayersCollection(): CollectionReference?
     fun getQuestionsCollection(): CollectionReference?

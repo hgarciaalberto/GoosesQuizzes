@@ -23,7 +23,10 @@ const val QUIZZES_ROOT: String = "${ROOT}/quizzes"
 
 // Tenancies node
 const val TENANCIES_ROOT: String = "${ROOT}/tenancies"
-const val TENANCY_EVENTS: String = "events"
+
+// Events node
+const val EVENTS_ROOTS: String = "${ROOT}/events"
+
 
 // Users Tenancies node
 const val USERS_TENANCIES_ROOT: String = "${ROOT}/userstenancies"

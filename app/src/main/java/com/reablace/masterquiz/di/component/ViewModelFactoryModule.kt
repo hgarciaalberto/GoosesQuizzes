@@ -4,7 +4,6 @@ import com.reablace.masterquiz.common.ViewModelFactory
 import com.reablace.masterquiz.firebase.auth.FirebaseAuthRepository
 import com.reablace.masterquiz.firebase.firestore.FirestoreRepository
 import com.reablace.masterquiz.ui.login.LoginFirebaseViewModel
-import com.reablace.masterquiz.ui.main.EventListViewModel
 import dagger.Module
 import dagger.Provides
 import javax.inject.Provider
@@ -13,12 +12,10 @@ import javax.inject.Provider
 class ViewModelFactoryModule {
     @Provides
     fun viewModelFactory(
-        loginFirebaseViewModelProvider: Provider<LoginFirebaseViewModel>,
-        eventListViewModel: Provider<EventListViewModel>
+        loginFirebaseViewModelProvider: Provider<LoginFirebaseViewModel>
     ): ViewModelFactory {
         return ViewModelFactory(
-            loginFirebaseViewModelProvider,
-            eventListViewModel)
+            loginFirebaseViewModelProvider)
     }
 
     @Provides
@@ -27,8 +24,4 @@ class ViewModelFactoryModule {
             firebaseAuthRepository = FirebaseAuthRepository(), firestoreRepository = FirestoreRepository())
     }
 
-    @Provides
-    fun getMainViewModel(): EventListViewModel {
-        return EventListViewModel(firestoreRepository = FirestoreRepository())
-    }
 }

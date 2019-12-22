@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/nav_eventList">
+    app:startDestination="@id/nav_list">
 
     <fragment
-        android:id="@+id/nav_eventList"
+        android:id="@+id/nav_list"
         android:name="com.reablace.masterquiz.ui.listevent.EventListFragment"
         android:label="EventListFragment"
-        android:layout="@layout/fragment_event_list" />
+        android:layout="@layout/fragment_recyclerview_list" />
 
     <fragment
-        android:id="@+id/nav_home"
+        android:id="@+id/nav_map"
         android:name="com.reablace.masterquiz.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
