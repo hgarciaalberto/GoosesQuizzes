@@ -1,6 +1,7 @@
 package com.reablace.masterquiz.ui.listevent
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,17 +13,37 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.firestore.QuerySnapshot
 import com.reablace.masterquiz.R
 import com.reablace.masterquiz.base.BaseFragment
-import com.reablace.masterquiz.common.MY_PERMISSIONS_REQUEST_GOOGLE_MAP
+import com.reablace.masterquiz.common.*
+import com.reablace.masterquiz.firebase.firestore.FirestoreRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 private const val TAG = "EventMapFragment"
 
-class EventMapFragment : BaseFragment(), OnMapReadyCallback {
+class EventMapFragment : BaseFragment(), OnMapReadyCallback, CoroutineScope {
+
+    @Inject
+    lateinit var firestoreRepository: FirestoreRepository
 
     private lateinit var mMap: GoogleMap
+
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        getControllerComponent().inject(this)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_map, container, false)
@@ -31,22 +52,27 @@ class EventMapFragment : BaseFragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Get the SupportMapFragment and request notification when the map is ready to be used.
-        // Get the SupportMapFragment and request notification when the map is ready to be used.
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-    }
 
+    }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        // Add a marker in Sydney, Australia, and move the camera.
-        val spain = LatLng(40.0, -3.0)
-        mMap.addMarker(MarkerOptions().position(spain).title("Marker in Spain"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(spain))
 
         if (checkSelfPermission(
                 activity!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.isMyLocationEnabled = true
+
+            getEventMarkers()
+
+            val edinburgh = LatLng(55.953472, -3.188275)
+            val cameraPosition = CameraPosition.builder()
+                .target(edinburgh)
+                .zoom(13f)
+                .build()
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
         } else {
             // Show rationale and request permission.
             showRationaleAndRequest()
@@ -105,6 +131,30 @@ class EventMapFragment : BaseFragment(), OnMapReadyCallback {
                 // Ignore all other requests.
                 Toast.makeText(requireActivity(), "Ignore all other requests", Toast.LENGTH_LONG).show()
             }
+        }
+    }
+
+    private fun getEventMarkers() {
+        val uiScope = CoroutineScope(Dispatchers.Main)
+        uiScope.launch {
+            setMarkers(firestoreRepository.getFilterEventList(FUTURE_EVENTS))
+        }
+    }
+
+    private fun setMarkers(events: QuerySnapshot) {
+
+
+        events.forEach {
+
+            val location = it.getGeoPoint(EVENTS_FIELD_LOCATION)?.let { geoPoint ->
+                LatLng(geoPoint.latitude, geoPoint.longitude)
+            }
+
+            mMap.addMarker(
+                MarkerOptions()
+                    .position(location!!)
+                    .title(it.getString(EVENTS_FIELD_NAME))
+                    .snippet(it.getString(EVENTS_FIELD_STATE)))
         }
     }
 }
