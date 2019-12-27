@@ -4,6 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import com.reablace.masterquiz.commontest.MainCoroutineScopeRule
+import com.reablace.masterquiz.ui.MainActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
 import org.junit.runner.RunWith

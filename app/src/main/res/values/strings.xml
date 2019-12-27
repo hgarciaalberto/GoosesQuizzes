@@ -17,6 +17,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <!--    Fragments titles-->
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -25,4 +26,9 @@
     <string name="menu_send">Send</string>
     <string name="menu_event_list">Event list</string>
     <string name="menu_event_map">Event map</string>
+
+    <!--    Events-->
+    <string name="pager_title_future_event">Future Events</string>
+    <string name="pager_title_past_event">Past Events</string>
+
 </resources>

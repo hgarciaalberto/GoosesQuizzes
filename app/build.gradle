@@ -5,6 +5,11 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
+
+def secretsPropertiesFile = rootProject.file("secrets.properties")
+def secretsProperties = new Properties()
+secretsProperties.load(new FileInputStream(secretsPropertiesFile))
+
 android {
 
     compileSdkVersion project.compileSdkVersion
@@ -29,7 +34,12 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
-        signingConfig signingConfigs.debug
+
+        // Default variables
+
+//        buildConfigField ("String", "MAP_API_KEY", secretsProperties['MAP_API_KEY'])
+        resValue "string", "mapApiKey", secretsProperties['MAP_API_KEY']
+
     }
 
     signingConfigs {
@@ -39,17 +49,27 @@ android {
             keyAlias = 'androiddebugkey'
             keyPassword 'android'
         }
+
+        //TODO: create credential and update "secrets.properties" file
+        release {
+            storeFile file(secretsProperties['storeFile'])
+            storePassword secretsProperties['storePassword']
+            keyAlias secretsProperties['keyAlias']
+            keyPassword secretsProperties['keyPassword']
+        }
     }
 
     buildTypes {
 
         debug {
             buildConfigField "String", "FIRESTORE_FLAVOR", '"test"'
+            signingConfig signingConfigs.debug
         }
 
         release {
-            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled false
+            signingConfig signingConfigs.release
 
             // Custom configuration
             buildConfigField "String", "FIRESTORE_FLAVOR", '"production"'
@@ -79,12 +99,13 @@ android {
 dependencies {
     // Android
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.2.0-alpha03'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.multidex:multidex:$multidexVersion"
     implementation "androidx.appcompat:appcompat:$androidxVersion"
     implementation "androidx.core:core-ktx:$androidxVersion"
     implementation "androidx.annotation:annotation:$androidxVersion"
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation "androidx.constraintlayout:constraintlayout:$androidxConstraintLayoutVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$androidxLifecycleVersion"
     implementation "androidx.navigation:navigation-fragment:$androidxNavigationVersion"
@@ -147,10 +168,11 @@ dependencies {
     // Firebase
     implementation "com.google.firebase:firebase-analytics:$firebaseAnalyticsVersion"
     implementation "com.google.firebase:firebase-auth:$firebaseAuthVersion"
-    implementation "com.google.firebase:firebase-firestore-ktx:21.3.1"
+    implementation "com.google.firebase:firebase-firestore-ktx:$firebaseFirestoreVersion"
 //    implementation "com.google.firebase:firebase-firestore:$firebaseFirestoreVersion"
     implementation "com.firebaseui:firebase-ui-firestore:$firebaseFirestoreUiVersion"
     implementation "com.google.firebase:firebase-firestore-ktx:$firebaseFirestoreVersion"
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
 
 }

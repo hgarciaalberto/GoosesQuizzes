@@ -7,14 +7,14 @@
 
     <fragment
         android:id="@+id/nav_list"
-        android:name="com.reablace.masterquiz.ui.listevent.EventListFragment"
-        android:label="EventListFragment"
+        android:name="com.reablace.masterquiz.ui.listevent.EventPagerFragment"
+        android:label="@string/menu_event_list"
         android:layout="@layout/fragment_recyclerview_list" />
 
     <fragment
         android:id="@+id/nav_map"
-        android:name="com.reablace.masterquiz.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:name="com.reablace.masterquiz.ui.listevent.EventMapFragment"
+        android:label="@string/menu_event_map"
+        tools:layout="@layout/fragment_map"></fragment>
 
 </navigation>

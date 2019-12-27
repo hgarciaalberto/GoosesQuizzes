@@ -5,6 +5,11 @@
     package="com.reablace.masterquiz">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
 
     <application
         android:name="com.reablace.masterquiz.base.BaseApplication"
@@ -15,6 +20,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/mapApiKey" />
+        <!--            android:value='BuildConfig.MAP_API_KEY' />-->
 
         <!--  You don't need to include android:required="false" if your app's minSdkVersion is 28 or higher. -->
         <uses-library
@@ -33,7 +47,7 @@
         </activity>
 
         <activity
-            android:name="com.reablace.masterquiz.ui.main.MainActivity"
+            android:name="com.reablace.masterquiz.ui.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

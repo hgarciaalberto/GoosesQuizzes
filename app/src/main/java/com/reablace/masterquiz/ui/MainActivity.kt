@@ -1,4 +1,4 @@
-package com.reablace.masterquiz.ui.main
+package com.reablace.masterquiz.ui
 
 import android.os.Bundle
 import android.view.Menu
@@ -15,7 +15,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.reablace.masterquiz.R
 import com.reablace.masterquiz.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 class MainActivity : BaseActivity() {
 
@@ -47,6 +46,7 @@ class MainActivity : BaseActivity() {
         }
 
         val navController = findNavController(R.id.navController)
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
@@ -77,4 +77,5 @@ class MainActivity : BaseActivity() {
         val navController = findNavController(R.id.navController)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
 }

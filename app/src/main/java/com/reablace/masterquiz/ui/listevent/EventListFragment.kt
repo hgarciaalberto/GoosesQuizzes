@@ -9,8 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.reablace.masterquiz.R
 import com.reablace.masterquiz.base.BaseFragment
-import com.reablace.masterquiz.common.MySharedPrefsManager
-import com.reablace.masterquiz.di.component.LoginSharedPrefs
+import com.reablace.masterquiz.common.EVENT_TYPE
 import com.reablace.masterquiz.firebase.firestore.FirestoreRepository
 import com.reablace.masterquiz.models.QuizEvent
 import kotlinx.android.synthetic.main.fragment_recyclerview_list.*
@@ -20,13 +19,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-private const val TAG = "EventListFragment"
 
 class EventListFragment : BaseFragment(), CoroutineScope {
-
-    @Inject
-    @field:LoginSharedPrefs
-    lateinit var userSesionSharedPrefs: MySharedPrefsManager
 
     @Inject
     lateinit var firestoreRepository: FirestoreRepository
@@ -48,9 +42,12 @@ class EventListFragment : BaseFragment(), CoroutineScope {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val eventType = arguments?.getString(EVENT_TYPE)
+
         val uiScope = CoroutineScope(Dispatchers.Main)
         uiScope.launch {
-            firestoreRepository.getEventList().let {
+            //            firestoreRepository.getEventList().let {
+            firestoreRepository.getFilterEventList(eventType!!).let {
                 val options = FirestoreRecyclerOptions.Builder<QuizEvent>()
                     .setLifecycleOwner(activity)
                     .setQuery(it.query, QuizEvent::class.java)
@@ -66,4 +63,23 @@ class EventListFragment : BaseFragment(), CoroutineScope {
             }
         }
     }
+
+    companion object {
+        private const val TAG = "EventListFragment"
+
+        fun newInstance(eventType: String) = EventListFragment().apply {
+            arguments = Bundle().apply {
+                putString(EVENT_TYPE, eventType)
+            }
+        }
+    }
 }
+
+/* Fragment with parameters
+val fragment = DemoObjectFragment()
+fragment.arguments = Bundle().apply {
+    // Our object is just an integer :-P
+    putInt(ARG_OBJECT, position + 1)
+}
+return fragment
+*/

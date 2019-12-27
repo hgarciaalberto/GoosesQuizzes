@@ -7,6 +7,7 @@ interface FirestoreRepositoryContract {
 
     suspend fun getUserTenancy(userAuthId: String): String
     suspend fun getEventList(): QuerySnapshot
+    suspend fun getFilterEventList(eventType: String): QuerySnapshot
 
     fun getPlayersCollection(): CollectionReference?
     fun getQuestionsCollection(): CollectionReference?

@@ -1,5 +1,6 @@
 package com.reablace.masterquiz.firebase.firestore
 
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -24,8 +25,16 @@ class FirestoreRepository @Inject constructor() : FirestoreRepositoryContract {
         }
     }
 
-    override suspend fun getEventList(): QuerySnapshot {
-        return db.collection(EVENTS_ROOTS).get().await()
+    override suspend fun getEventList(): QuerySnapshot = db.collection(EVENTS_ROOTS).get().await()
+
+    override suspend fun getFilterEventList(eventType: String): QuerySnapshot {
+
+        val currentDate = Timestamp.now()
+
+        return if (eventType == FUTURE_EVENTS)
+            db.collection(EVENTS_ROOTS).whereGreaterThanOrEqualTo(EVENTS_FIELD_DATE, currentDate.toDate()).get().await()
+        else
+            db.collection(EVENTS_ROOTS).whereLessThan(EVENTS_FIELD_DATE, currentDate.toDate()).get().await()
     }
 
     override fun getPlayersCollection(): CollectionReference? = db.collection(PLAYERS_ROOT)

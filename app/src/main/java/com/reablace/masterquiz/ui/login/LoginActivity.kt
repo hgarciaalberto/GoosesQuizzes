@@ -12,7 +12,7 @@ import com.reablace.masterquiz.R
 import com.reablace.masterquiz.base.BaseActivity
 import com.reablace.masterquiz.databinding.ActivityLoginBinding
 import com.reablace.masterquiz.models.login.LoggedInUserView
-import com.reablace.masterquiz.ui.main.MainActivity
+import com.reablace.masterquiz.ui.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : BaseActivity() {
