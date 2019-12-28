@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: "scabbard.gradle"
 
 
 def secretsPropertiesFile = rootProject.file("secrets.properties")
@@ -96,6 +97,13 @@ android {
     }
 }
 
+
+scabbard {
+    enabled true
+//    failOnError false
+    fullBindingGraphValidation true
+}
+
 dependencies {
     // Android
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -173,6 +181,4 @@ dependencies {
     implementation "com.firebaseui:firebase-ui-firestore:$firebaseFirestoreUiVersion"
     implementation "com.google.firebase:firebase-firestore-ktx:$firebaseFirestoreVersion"
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
-
-
 }
