@@ -9,36 +9,33 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.firebase.firestore.QuerySnapshot
 import com.reablace.masterquiz.R
 import com.reablace.masterquiz.base.BaseFragment
-import com.reablace.masterquiz.common.*
-import com.reablace.masterquiz.firebase.firestore.FirestoreRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.reablace.masterquiz.common.MY_PERMISSIONS_REQUEST_GOOGLE_MAP
+import com.reablace.masterquiz.common.ViewModelFactory
+import com.reablace.masterquiz.models.QuizEvent
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 private const val TAG = "EventMapFragment"
 
-class EventMapFragment : BaseFragment(), OnMapReadyCallback, CoroutineScope {
+class EventMapFragment : BaseFragment(), OnMapReadyCallback {
 
     @Inject
-    lateinit var firestoreRepository: FirestoreRepository
+    lateinit var viewModelFactory: ViewModelFactory
 
-    private lateinit var mMap: GoogleMap
+    private lateinit var mapViewModel: MapViewModel
 
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
+    private var mMap: GoogleMap? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -46,14 +43,21 @@ class EventMapFragment : BaseFragment(), OnMapReadyCallback, CoroutineScope {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mapViewModel = ViewModelProviders.of(this, viewModelFactory).get(MapViewModel::class.java)
+
         // Get the SupportMapFragment and request notification when the map is ready to be used.
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        // Events observer
+        mapViewModel.events.observe(viewLifecycleOwner, Observer { setMarkers(it) })
 
     }
 
@@ -62,16 +66,21 @@ class EventMapFragment : BaseFragment(), OnMapReadyCallback, CoroutineScope {
 
         if (checkSelfPermission(
                 activity!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.isMyLocationEnabled = true
+            mMap?.isMyLocationEnabled = true
 
-            getEventMarkers()
+            mapViewModel.fetchEventList()
 
             val edinburgh = LatLng(55.953472, -3.188275)
             val cameraPosition = CameraPosition.builder()
                 .target(edinburgh)
                 .zoom(13f)
                 .build()
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+            mMap?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
+            mMap?.setOnMarkerClickListener {
+                mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(it.position, 6f))
+                false
+            }
 
         } else {
             // Show rationale and request permission.
@@ -107,7 +116,7 @@ class EventMapFragment : BaseFragment(), OnMapReadyCallback, CoroutineScope {
     }
 
     private fun showRationaleAndRequest() {
-        Toast.makeText(activity, "Show an explantation", Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, "Show an explantation", Toast.LENGTH_LONG).show() //TODO: show explanation
         requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSIONS_REQUEST_GOOGLE_MAP)
     }
 
@@ -134,30 +143,34 @@ class EventMapFragment : BaseFragment(), OnMapReadyCallback, CoroutineScope {
         }
     }
 
-    private fun getEventMarkers() {
-        val uiScope = CoroutineScope(Dispatchers.Main)
-        uiScope.launch {
-            setMarkers(firestoreRepository.getFilterEventList(FUTURE_EVENTS))
+    /**
+     * Update map markers when
+     */
+    private fun setMarkers(events: List<QuizEvent>) {
+
+        if (mMap == null) {
+            val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+            mapFragment.getMapAsync(this)
         }
-    }
 
-    private fun setMarkers(events: QuerySnapshot) {
-
+        mMap?.clear()
 
         events.forEach {
 
-            val location = it.getGeoPoint(EVENTS_FIELD_LOCATION)?.let { geoPoint ->
+            val location = it.location?.let { geoPoint ->
                 LatLng(geoPoint.latitude, geoPoint.longitude)
             }
 
-            mMap.addMarker(
-                MarkerOptions()
-                    .position(location!!)
-                    .title(it.getString(EVENTS_FIELD_NAME))
-                    .snippet(it.getString(EVENTS_FIELD_STATE)))
+            location?.apply {
+                mMap?.addMarker(
+                    MarkerOptions()
+                        .position(this)
+                        .title(it.name)
+                        .snippet(it.state)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+            }
         }
     }
 }
-
 
 // https://developers.google.com/maps/documentation/android-sdk/location
