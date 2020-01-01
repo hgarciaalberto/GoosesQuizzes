@@ -6,7 +6,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: "scabbard.gradle"
 
-
 def secretsPropertiesFile = rootProject.file("secrets.properties")
 def secretsProperties = new Properties()
 secretsProperties.load(new FileInputStream(secretsPropertiesFile))
@@ -31,7 +30,7 @@ android {
         targetSdkVersion project.targetSdkVersion
         multiDexEnabled true
         versionCode 1
-        versionName "1.0"
+        versionName "0.2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
@@ -40,7 +39,6 @@ android {
 
 //        buildConfigField ("String", "MAP_API_KEY", secretsProperties['MAP_API_KEY'])
         resValue "string", "mapApiKey", secretsProperties['MAP_API_KEY']
-
     }
 
     signingConfigs {
@@ -99,7 +97,7 @@ android {
 
 
 scabbard {
-    enabled true
+    enabled false
 //    failOnError false
     fullBindingGraphValidation true
 }

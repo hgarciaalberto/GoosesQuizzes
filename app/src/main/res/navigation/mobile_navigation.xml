@@ -9,12 +9,35 @@
         android:id="@+id/nav_list"
         android:name="com.reablace.masterquiz.ui.listevent.EventPagerFragment"
         android:label="@string/menu_event_list"
-        android:layout="@layout/fragment_recyclerview_list" />
+        android:layout="@layout/fragment_recyclerview_list">
+        <action
+            android:id="@+id/eventDetailAction"
+            app:destination="@id/nav_eventDetail" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_map"
         android:name="com.reablace.masterquiz.ui.listevent.EventMapFragment"
         android:label="@string/menu_event_map"
-        tools:layout="@layout/fragment_map"></fragment>
+        tools:layout="@layout/fragment_map">
+        <action
+            android:id="@id/eventDetailAction"
+            app:destination="@id/nav_eventDetail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_eventDetail"
+        android:name="com.reablace.masterquiz.ui.detailevent.EventDetailFragment"
+        tools:layout="@layout/fragment_event_detail">
+        <argument
+            android:name="eventId"
+            app:argType="string" />
+    </fragment>
 
 </navigation>
+
+    <!--    Pass data between destination:-->
+    <!--    https://developer.android.com/guide/navigation/navigation-pass-data -->
+
+    <!--    Test Destinations: min 28:40-->
+    <!--    https://www.youtube.com/watch?v=8GCXtCjtg40-->

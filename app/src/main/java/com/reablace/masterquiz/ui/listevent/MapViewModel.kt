@@ -18,23 +18,6 @@ class MapViewModel @Inject constructor(private var firestoreRepository: Firestor
     private val _events = MutableLiveData<List<QuizEvent>>()
     val events: LiveData<List<QuizEvent>> = _events
 
-//    fun fetchEventList() {
-//        viewModelScope.launch {
-//            _showLoading.value = true
-//            try {
-//                withTimeout(FIREBASE_TIMEOUT) {
-//                    firestoreRepository.getFilterEventList(FUTURE_EVENTS).let {
-//                        _events.value = it.toObjects(QuizEvent::class.java)
-//                    }
-//                }
-//            } catch (e: FirebaseAuthException) {
-//                Log.e(TAG, "Error fetching quiz events", e)
-//            } finally {
-//                _showLoading.value = false
-//            }
-//        }
-//    }
-
 
     fun fetchEventList() {
         firestoreRepository.getFilterEventList(FUTURE_EVENTS, listener)

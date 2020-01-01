@@ -30,3 +30,15 @@
 -keepclassmembernames class kotlinx.** {
     volatile <fields>;
 }
+
+
+
+# Pass data between destinations in Navigation generated classes
+
+#@Keep class ParcelableArg : Parcelable { ... }
+#@Keep class SerializableArg : Serializable { ... }
+#@Keep enum class EnumArg { ... }
+#-keepnames class com.path.to.your.ParcelableArg
+#-keepnames class com.path.to.your.SerializableArg
+#-keepnames class com.path.to.your.EnumArg
+

@@ -2,6 +2,8 @@ package com.reablace.masterquiz.di.component
 
 import com.reablace.masterquiz.base.BaseActivity
 import com.reablace.masterquiz.ui.MainActivity
+import com.reablace.masterquiz.ui.detailevent.EventDetailFragment
+import com.reablace.masterquiz.ui.home.EventDetailsMapFragment
 import com.reablace.masterquiz.ui.listevent.EventListFragment
 import com.reablace.masterquiz.ui.listevent.EventMapFragment
 import com.reablace.masterquiz.ui.login.LoginActivity
@@ -29,5 +31,9 @@ interface ControllerSubcomponent {
     fun inject(eventListFragment: EventListFragment)
 
     fun inject(mapFragment: EventMapFragment)
+
+    fun inject(eventDetailFragment: EventDetailFragment)
+
+    fun inject(eventDetailMaoFragment: EventDetailsMapFragment)
 
 }

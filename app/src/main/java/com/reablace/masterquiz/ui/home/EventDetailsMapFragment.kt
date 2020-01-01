@@ -1,4 +1,4 @@
-package com.reablace.masterquiz.ui.listevent
+package com.reablace.masterquiz.ui.home
 
 import android.Manifest
 import android.content.Context
@@ -8,8 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -20,19 +18,10 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.reablace.masterquiz.R
 import com.reablace.masterquiz.base.BaseMapFragment
-import com.reablace.masterquiz.common.ViewModelFactory
+import com.reablace.masterquiz.common.EVENT
 import com.reablace.masterquiz.models.QuizEvent
-import javax.inject.Inject
 
-private const val TAG = "EventMapFragment"
-
-class EventMapFragment : BaseMapFragment(), OnMapReadyCallback {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private lateinit var mapViewModel: MapViewModel
-
+class EventDetailsMapFragment : BaseMapFragment(), OnMapReadyCallback {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -40,28 +29,16 @@ class EventMapFragment : BaseMapFragment(), OnMapReadyCallback {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mapViewModel = ViewModelProviders.of(this, viewModelFactory).get(MapViewModel::class.java)
-
-        // Events observer
-        mapViewModel.events.observe(viewLifecycleOwner, Observer { setMarkers(it) })
-
         // Get the SupportMapFragment and request notification when the map is ready to be used.
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
-
-    override fun onResume() {
-        super.onResume()
-        mapViewModel.fetchEventList()
-    }
-
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
@@ -70,14 +47,7 @@ class EventMapFragment : BaseMapFragment(), OnMapReadyCallback {
                 activity!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap?.isMyLocationEnabled = true
 
-            mapViewModel.fetchEventList()
-
-            val edinburgh = LatLng(55.953472, -3.188275)
-            val cameraPosition = CameraPosition.builder()
-                .target(edinburgh)
-                .zoom(13f)
-                .build()
-            mMap?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+            getMarker()
 
             mMap?.setOnMarkerClickListener {
                 mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(it.position, 6f))
@@ -90,11 +60,19 @@ class EventMapFragment : BaseMapFragment(), OnMapReadyCallback {
         }
     }
 
+    private fun getMarker() {
+        val event = arguments?.getSerializable(EVENT) as QuizEvent
+
+        val location = event.location?.let { geoPoint ->
+            LatLng(geoPoint.latitude, geoPoint.longitude)
+        }
+        setMarkers(location)
+    }
 
     /**
      * Update map markers when
      */
-    private fun setMarkers(events: List<QuizEvent>) {
+    private fun setMarkers(markerLocation: LatLng?) {
 
         if (mMap == null) {
             val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
@@ -103,22 +81,31 @@ class EventMapFragment : BaseMapFragment(), OnMapReadyCallback {
 
         mMap?.clear()
 
-        events.forEach {
+        // Add marker
+        markerLocation?.apply {
+            mMap?.addMarker(
+                MarkerOptions()
+                    .position(this)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+        }
 
-            val location = it.location?.let { geoPoint ->
-                LatLng(geoPoint.latitude, geoPoint.longitude)
-            }
+        // Apply zoom to maker
+        val cameraPosition = CameraPosition.builder()
+            .target(markerLocation)
+            .zoom(15f)
+            .build()
+        mMap?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
 
-            location?.apply {
-                mMap?.addMarker(
-                    MarkerOptions()
-                        .position(this)
-                        .title(it.name)
-                        .snippet(it.state)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+    }
+
+    companion object {
+
+        private const val TAG = "EventDetailsMapFragment"
+        fun newInstance(event: QuizEvent) = EventDetailsMapFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable(EVENT, event)
             }
         }
     }
 }
 
-// https://developers.google.com/maps/documentation/android-sdk/location

@@ -30,5 +30,7 @@
     <!--    Events-->
     <string name="pager_title_future_event">Future Events</string>
     <string name="pager_title_past_event">Past Events</string>
+    <string name="leave_event">Leave the event</string>
+    <string name="join_event">Join to the event</string>
 
 </resources>

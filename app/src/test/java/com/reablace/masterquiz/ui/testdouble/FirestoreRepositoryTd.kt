@@ -9,7 +9,7 @@ class FirestoreRepositoryTd : FirestoreRepositoryContract {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override suspend fun getEventList(): QuerySnapshot {
+    override suspend fun getEventsRootCollection(): QuerySnapshot {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

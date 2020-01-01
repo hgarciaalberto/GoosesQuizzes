@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.reablace.masterquiz.R
@@ -20,7 +21,7 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 
-class EventListFragment : BaseFragment(), CoroutineScope {
+class EventListFragment : BaseFragment(), CoroutineScope, EventsRecyclerAdapter.EventClickListener {
 
     @Inject
     lateinit var firestoreRepository: FirestoreRepository
@@ -46,14 +47,13 @@ class EventListFragment : BaseFragment(), CoroutineScope {
 
         val uiScope = CoroutineScope(Dispatchers.Main)
         uiScope.launch {
-            //            firestoreRepository.getEventList().let {
             firestoreRepository.getFilterEventList(eventType!!).let {
                 val options = FirestoreRecyclerOptions.Builder<QuizEvent>()
                     .setLifecycleOwner(activity)
                     .setQuery(it.query, QuizEvent::class.java)
                     .build()
 
-                mAdapter = EventsRecyclerAdapter(options)
+                mAdapter = EventsRecyclerAdapter(options, this@EventListFragment)
 
                 eventListRecyclerView.apply {
                     setHasFixedSize(true)
@@ -64,9 +64,14 @@ class EventListFragment : BaseFragment(), CoroutineScope {
         }
     }
 
-    companion object {
-        private const val TAG = "EventListFragment"
+    override fun onEventClickListener(eventId: String) {
+        val action = EventPagerFragmentDirections.eventDetailAction(eventId)
+        findNavController().navigate(action)
+    }
 
+    companion object {
+
+        private const val TAG = "EventListFragment"
         fun newInstance(eventType: String) = EventListFragment().apply {
             arguments = Bundle().apply {
                 putString(EVENT_TYPE, eventType)
